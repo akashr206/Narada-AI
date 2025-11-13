@@ -1,132 +1,110 @@
 "use client";
+
+import { useState } from "react";
+import { Bell, Search, LogOut, User, Menu } from "lucide-react";
+import { useUser, useClerk } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import ThemeToggle from "./ThemeToggle";
-import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import UserActions from "./UserActions";
 
-const Navbar = () => {
-    const navs = [
-        { title: "Home", link: "/home" },
-        { title: "Products", link: "/products" },
-        { title: "About", link: "/about" },
-        { title: "Contact", link: "/contact" },
-    ];
-    const [isOpen, setIsOpen] = useState(false);
-    const [menuHeight, setMenuHeight] = useState(0);
-    const menuRef = useRef(null);
+export default function Navbar() {
+  const { user } = useUser();
+  const { signOut } = useClerk();
+  const [notificationCount] = useState(3);
 
-    useEffect(() => {
-        if (menuRef.current) {
-            console.log(menuRef.current.scrollHeight);
-
-            setMenuHeight(menuRef.current.scrollHeight);
-        }
-
-        window.addEventListener("resize", (e) => {
-            if (window.innerWidth >= 768) {
-                setIsOpen(false);
-            }
-        });
-
-    }, [isOpen]);
-
-    return (
-        <header
-            className={cn(
-                "fixed top-0 py-4 bg-background/60 backdrop-blur-lg w-screen px-4 "
-            )}
+  return (
+    <nav className="sticky top-0 z-40 border-b w-screen border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-950">
+      <div className="flex h-16 items-center justify-between">
+        {/* Sidebar Toggle Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="mr-2 hover:bg-gray-100 dark:hover:bg-gray-800"
         >
-            <motion.nav
-                animate={{
-                    border: isOpen ? 0 : 4,
-                    height: isOpen ? 56 + menuHeight : 14 * 4,
-                }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className={cn(
-                    "w-full rounded-xl bg-background h-14  mx-auto  flex flex-col justify-center px-5 border"
-                )}
-            >
-                <div className="w-full flex justify-between items-center">
-                    <div>Logo</div>
-                    <nav>
-                        <ul className="flex gap-5 max-md:hidden">
-                            {navs.map((nav, ind) => (
-                                <li
-                                    key={ind}
-                                    className="opacity-85 hover:font-semibold hover:opacity-100 transition-all"
-                                >
-                                    <Link href={nav.link}>{nav.title}</Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
-                    <div className="flex items-center gap-2 justify-center">
-                        <ThemeToggle></ThemeToggle>
-                        <div>
-                            <UserActions></UserActions>
-                        </div>
-                        <button
-                            onClick={() => setIsOpen((prev) => !prev)}
-                            className="md:hidden"
-                        >
-                            <motion.div
-                                animate={{ rotate: isOpen ? 45 : 0 }}
-                                className="w-[18px] h-[1.5px] rounded-full bg-foreground"
-                            ></motion.div>
-                            <motion.div
-                                animate={{
-                                    rotate: isOpen ? -45 : 0,
-                                    width: isOpen ? 18 : 14,
-                                    marginTop: isOpen ? -1 : 4,
-                                }}
-                                className="w-[14px] ml-auto h-[1.5px] rounded-full bg-foreground"
-                            ></motion.div>
-                        </button>
-                    </div>
-                </div>
-                <AnimatePresence>
-                    <motion.div
-                        ref={menuRef}
-                        animate={{
-                            height: isOpen ? menuHeight : 0,
-                            opacity: isOpen ? 1 : 0,
-                        }}
-                        transition={{
-                            height: {
-                                duration: 0.3,
-                                ease: "easeInOut",
-                            },
-                            opacity: {
-                                duration: 0.3,
-                                delay: isOpen ? 0.1 : 0,
-                            },
-                        }}
-                        className="md:hidden w-full h-max "
-                    >
-                        <ul className="flex flex-col gap-2 mt-2">
-                            {isOpen &&
-                                navs.map((nav, ind) => (
-                                    <motion.li
-                                        key={ind}
-                                        initial={{ x: -30, opacity: 0 }}
-                                        animate={{ x: 0, opacity: 1 }}
-                                        transition={{
-                                            ease: "linear",
-                                            duration: (ind + 1) * 0.1,
-                                        }}
-                                        className="opacity-85 hover:font-semibold hover:opacity-100 border-b last-of-type:border-none my-1 text-lg"
-                                    >
-                                        <Link href={nav.link}>{nav.title}</Link>
-                                    </motion.li>
-                                ))}
-                        </ul>
-                    </motion.div>
-                </AnimatePresence>
-            </motion.nav>
-        </header>
-    );
-};
+          <Menu className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+        </Button>
 
-export default Navbar;
+        {/* Search Bar */}
+        <div className="max-w-md flex-1">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400 dark:text-gray-500" />
+            <Input
+              type="text"
+              placeholder="Search patients, staff, supplies..."
+              className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:bg-gray-700"
+            />
+          </div>
+        </div>
+
+        {/* Right Section */}
+        <div className="flex items-center gap-6 ml-auto">
+          <ThemeToggle />
+
+          {/* Notifications */}
+          <div className="relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <Bell className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+              {notificationCount > 0 && (
+                <span className="absolute top-0 right-0 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-white">
+                  {notificationCount}
+                </span>
+              )}
+            </Button>
+          </div>
+
+          {/* Profile Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <div className="text-right hidden sm:block">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {user?.firstName} {user?.lastName}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Administrator
+                  </p>
+                </div>
+                <div className="h-10 w-10 rounded-full bg-blue-500 dark:bg-blue-600 flex items-center justify-center text-white font-semibold">
+                  {user?.firstName?.[0]}
+                  {user?.lastName?.[0]}
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-48 dark:bg-gray-800 dark:border-gray-700"
+            >
+              <DropdownMenuItem className="flex items-center gap-2 dark:text-gray-300 dark:focus:bg-gray-700">
+                <User className="h-4 w-4" />
+                <span>Profile Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="dark:bg-gray-700" />
+              <DropdownMenuItem
+                onClick={() => signOut()}
+                className="flex items-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50 dark:text-red-400 dark:focus:bg-red-900/20"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Sign Out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </nav>
+  );
+}
