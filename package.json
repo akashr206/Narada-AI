@@ -1,0 +1,19 @@
+{
+    "name": "hospital-multiagent",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "start:manager": "node src/manager.js",
+        "start:fetcher": "node src/agents/news_fetcher.js",
+        "start:summarizer": "node src/agents/summarizer.js",
+        "start:analyzer": "node src/agents/analyzer.js"
+    },
+    "dependencies": {
+        "ioredis": "^5.3.2",
+        "@google/genai": "^1.0.0",
+        "@langchain/langgraph": "^0.2.0",
+        "dotenv": "^16.0.0",
+        "geolib": "^3.3.3",
+        "uuid": "^9.0.0"
+    }
+}
