@@ -4,6 +4,7 @@ import PatientFlowMetrics from "@/components/extra/patient-flow-metrics";
 import DepartmentCapacity from "@/components/extra/department-capacity";
 import PatientQueue from "@/components/extra/patient-queue";
 import AllPatientsTable from "@/components/extra/all-patients-table";
+import { User,ClipboardX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function PatientFlowPage() {
@@ -19,12 +20,12 @@ export default function PatientFlowPage() {
               Real-time patient tracking and department capacity
             </p>
           </div>
-          <div className="gap-2 flex flex-col">
+          <div className="gap-2 flex flex-col items-center">
             <Button className="w-fit  flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium text-sm sm:text-base">
-              👤 New Admission
+              <User /> New Admission
             </Button>
             <Button className="w-fit   flex items-center justify-center gap-2 px-4 sm:px-4 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm sm:text-base">
-              📤 Process Discharge
+              <ClipboardX/>Process Discharge
             </Button>
           </div>
         </div>
