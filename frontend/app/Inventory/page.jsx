@@ -1,78 +1,41 @@
-import React from "react";
-import StateCard from "../Inventory/component/StateCard";
-import {
-  ShoppingCart,
-  Search,
-  AlertTriangle,
-  TrendingDown,
-  Package,
-} from "lucide-react";
+'use client';
 
-export const InventoryDashboard = () => {
+import { useState } from 'react';
+import { ShoppingCart } from 'lucide-react';
+import InventoryMetrics from '@/components/extra/inventory-metrics';
+import InventoryList from '@/components/extra/inventory-list';
+import { Button } from '../../components/ui/button';
+
+export default function InventoryPage() {
   return (
-    <>
-      <div className="min-h-screen bg-gray-100 p-8">
-        /* Header */
-        <div className="mb-8 flex justify-between items-start">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+    <main className="flex-1 min-h-screen bg-gray-50 dark:bg-gray-950">
+      <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white truncate">
               Inventory Management
             </h1>
-            <p>Real-time supply tracking and automated reordering</p>
+            <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 mt-1">
+              Real-time supply tracking and automated reordering
+            </p>
           </div>
-          <button>
-            <ShoppingCart size={20} />
-            Manual Order
-          </button>
+          <Button className="flex items-center justify-center gap-2 px-3 sm:px-4 md:px-6 py-2 md:py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg font-medium text-xs sm:text-sm md:text-base transition-colors whitespace-nowrap flex-shrink-0">
+            <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+            <span>Manual Order</span>
+          </Button>
         </div>
-        /* Stats Cards */
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-          /* First card */
-          <div className="bg-red-50 border border-red-200 rounded-xl p-6 flex justify-between items-center">
-            <div>
-              <p>Critical Items</p>
-              <p>{criticalItems}</p>
-            </div>
-            <AlertTriangle className="text-red-600" size={40} />
-          </div>
-          /* Second card */
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 flex justify-between items-center">
-            <div>
-              <p className="text-amber-700 text-sm font-medium mb-1">
-                Low Stock
-              </p>
-              <p className="text-amber-900 text-4xl font-bold">
-                {lowStockItems}
-              </p>
-            </div>
-            <TrendingDown className="text-amber-600" size={40} />
-          </div>
-          /* Third card */
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 flex justify-between items-center">
-            <div>
-              <p className="text-blue-700 text-sm font-medium mb-1">
-                Total Items
-              </p>
-              <p className="text-blue-900 text-4xl font-bold">{totalItems}</p>
-            </div>
-            <Package className="text-blue-600" size={40} />
-          </div>
-          /* Fourth card */
-          <div className="bg-green-50 border border-green-200 rounded-xl p-6 flex justify-between items-center">
-            <div>
-              <p className="text-green-700 text-sm font-medium mb-1">
-                Auto-Order Active
-              </p>
-              <p className="text-green-900 text-4xl font-bold">
-                {autoOrdersActive}
-              </p>
-            </div>
-            <ShoppingCart className="text-green-600" size={40} />
-          </div>
+
+        {/* Metrics */}
+        <div className="mb-4 sm:mb-6 md:mb-8">
+          <InventoryMetrics />
         </div>
-        /*Supply status*/
-        <div></div>
+
+        {/* Inventory List */}
+        <div className="bg-white dark:bg-gray-900 rounded-lg border-1 border-gray-400 dark:border-gray-800 p-3 sm:p-4 md:p-6 lg:p-8">
+          <InventoryList />
+        </div>
       </div>
-    </>
+    </main>
   );
-};
+}
