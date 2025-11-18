@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export default function PatientFlowPage() {
   return (
     <main className="flex bg-gray-50 dark:bg-gray-950 transition-colors min-h-screen">
-      <div className="p-4 sm:p-6 md:p-8 w-full">
+      <div className="p-4 sm:p-6 w-full">
         <div className="flex justify-between xs:flex-row gap-2 sm:gap-3 mb-6 sm:mb-8">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-2">
