@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Bell, Search, LogOut, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSidebarOpen } from "@/app/hooks/useSidebar";
+import { useSidebarOpen } from "@/hooks/useSidebar";
 import {
     DropdownMenu,
     DropdownMenuContent,

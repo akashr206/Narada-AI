@@ -14,7 +14,7 @@ import {
     Briefcase,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSidebarOpen } from "@/app/hooks/useSidebar";
+import { useSidebarOpen } from "@/hooks/useSidebar";
 import { AnimatePresence, motion } from "framer-motion";
 
 const SIDEBAR_ITEMS = [

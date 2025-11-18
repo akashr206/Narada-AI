@@ -4,7 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import { SidebarOpenProvider } from "./hooks/useSidebar";
+import { SidebarOpenProvider } from "../hooks/useSidebar";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -33,9 +33,9 @@ export default function RootLayout({ children }) {
                     enableSystem
                 >
                     <SidebarOpenProvider>
-                        <div className="flex h-screen overflow-x-hidden">
+                        <div className="flex h-screen">
                             <Sidebar/>
-                            <div className="relative">
+                            <div className="relative w-full">
                                 <Navbar />
                                 <main className="overflow-y-auto p-6">
                                     {children}
