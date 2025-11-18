@@ -2,9 +2,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
-import { SidebarOpenProvider } from "../hooks/useSidebar";
+import { SidebarOpenProvider } from "./hooks/useSidebar";
+import LayoutContent from "./LayoutContent"; // ← import client component
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -27,22 +26,10 @@ export default function RootLayout({ children }) {
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-50 dark:bg-zinc-950`}
             >
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                >
-                    <SidebarOpenProvider>
-                        <div className="flex h-screen">
-                            <Sidebar/>
-                            <div className="relative w-full">
-                                <Navbar />
-                                <main className="overflow-y-auto p-6">
-                                    {children}
-                                </main>
-                            </div>
-                        </div>
-                    </SidebarOpenProvider>
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                        <SidebarOpenProvider>
+                            <LayoutContent>{children}</LayoutContent>
+                        </SidebarOpenProvider>
                 </ThemeProvider>
             </body>
         </html>

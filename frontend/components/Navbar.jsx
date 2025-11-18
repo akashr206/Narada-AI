@@ -19,7 +19,7 @@ export default function Navbar() {
     const { toggleSidebar } = useSidebarOpen();
 
     return (
-        <nav className="sticky top-0 z-40 border-b w-screen border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-950">
+        <nav className="sticky top-0 z-40 border-b  border-zinc-200 px-2 bg-white dark:border-zinc-700 dark:bg-zinc-950">
             <div className="flex h-16 items-center justify-between">
                 {/* Sidebar Toggle Button */}
                 <Button
