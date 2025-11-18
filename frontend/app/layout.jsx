@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
     title: "Team Arise",
-    description: "Team Arise's Codefury project",
+    description: "Team Arise's MumbaiHacks project",
 };
 
 export default function RootLayout({ children }) {
@@ -33,9 +33,9 @@ export default function RootLayout({ children }) {
                     enableSystem
                 >
                     <SidebarOpenProvider>
-                        <div className="flex h-screen overflow-hidden">
-                            <Sidebar />
-                            <div className="]relative">
+                        <div className="flex h-screen overflow-x-hidden">
+                            <Sidebar/>
+                            <div className="relative">
                                 <Navbar />
                                 <main className="overflow-y-auto p-6">
                                     {children}
