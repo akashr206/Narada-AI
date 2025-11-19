@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
     LayoutDashboard,
@@ -91,8 +92,14 @@ export default function Sidebar() {
                                 onClick={closeSidebarMobile}
                                 className="flex items-center gap-3"
                             >
-                                <div className="h-10 w-10 rounded-lg bg-blue-600 dark:bg-blue-500 flex items-center justify-center">
-                                    <Briefcase className="h-6 w-6 text-white" />
+                                <div className="h-10 w-10 rounded-lg bg-blue-600 dark:bg-blue-500 flex items-center justify-center overflow-hidden">
+                                    <Image
+                                        src="/logo.png"
+                                        alt="Narada AI Logo"
+                                        width={40}
+                                        height={40}
+                                        className="h-full w-full object-cover"
+                                    />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-zinc-900 dark:text-white">
