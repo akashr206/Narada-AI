@@ -3,22 +3,29 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Users, Activity, Package, Network } from 'lucide-react';
 import { useRef } from 'react';
+import { TiltCard } from '@/components/ui/tilt-card';
 
 const agents = [
   {
     icon: Users,
     title: 'Staff Agent',
-    description: 'Manages scheduling, shift assignments, and team coordination',
+    description: 'Dynamically adjusts schedules and reallocates staff during surges.',
+    color: "from-emerald-500/20 to-green-500/20",
+    accent: "text-emerald-500"
   },
   {
     icon: Activity,
-    title: 'Patient Agent',
-    description: 'Optimizes patient flow and appointment scheduling',
+    title: 'Patient Communication',
+    description: 'Sends automated notifications and appointment updates to patients.',
+    color: "from-purple-500/20 to-pink-500/20",
+    accent: "text-purple-500"
   },
   {
     icon: Package,
     title: 'Inventory Agent',
-    description: 'Monitors supplies and automates reordering processes',
+    description: 'Monitors supply levels and triggers restocking automatically.',
+    color: "from-orange-500/20 to-amber-500/20",
+    accent: "text-orange-500"
   },
 ];
 
@@ -60,45 +67,49 @@ function AgentCard({ agent, index, variants }) {
   const Icon = agent.icon;
 
   return (
-    <motion.div
-      ref={ref}
-      variants={variants}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateY,
-        rotateX,
-        transformStyle: "preserve-3d",
-      }}
-      className="relative h-full"
-    >
-      <div 
+    <TiltCard className="h-full">
+      <motion.div
+        ref={ref}
+        variants={variants}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         style={{
-          transform: "translateZ(75px)",
+          rotateY,
+          rotateX,
           transformStyle: "preserve-3d",
         }}
-        className="h-full p-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-card/80 backdrop-blur-sm hover:border-primary/30 hover:bg-secondary/30 transition-colors duration-300 text-center shadow-sm hover:shadow-xl group"
+        className="relative h-full"
       >
         <div 
-          style={{ transform: "translateZ(50px)" }}
-          className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors duration-300"
+          style={{
+            transform: "translateZ(75px)",
+            transformStyle: "preserve-3d",
+          }}
+          className="h-full p-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-card/80 backdrop-blur-sm hover:border-primary/30 hover:bg-secondary/30 transition-colors duration-300 text-center shadow-sm hover:shadow-xl group"
         >
-          <Icon className="w-8 h-8 text-primary" />
+          <div className={`absolute inset-0 bg-gradient-to-br ${agent.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`} />
+          
+          <div 
+            style={{ transform: "translateZ(50px)" }}
+            className="relative z-10 w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors duration-300"
+          >
+            <Icon className={`w-8 h-8 ${agent.accent}`} />
+          </div>
+          <h3 
+            style={{ transform: "translateZ(25px)" }}
+            className="relative z-10 text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors duration-300"
+          >
+            {agent.title}
+          </h3>
+          <p 
+            style={{ transform: "translateZ(25px)" }}
+            className="relative z-10 text-muted-foreground leading-relaxed"
+          >
+            {agent.description}
+          </p>
         </div>
-        <h3 
-          style={{ transform: "translateZ(25px)" }}
-          className="text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors duration-300"
-        >
-          {agent.title}
-        </h3>
-        <p 
-          style={{ transform: "translateZ(25px)" }}
-          className="text-muted-foreground leading-relaxed"
-        >
-          {agent.description}
-        </p>
-      </div>
-    </motion.div>
+      </motion.div>
+    </TiltCard>
   );
 }
 
@@ -128,24 +139,27 @@ export default function Agents() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }} // Removed margin to fix visibility issues
+          viewport={{ once: true }}
           className="text-center mb-16 sm:mb-20"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-balance bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-            Intelligent Agents
+          <div className="inline-block px-4 py-1.5 mb-4 rounded-full border border-primary/20 bg-primary/5 text-primary font-medium text-sm">
+            Our Unique Selling Proposition
+          </div>
+          <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 pb-1">
+            Meet Your AI Workforce
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
-            Specialized AI agents working together for optimal hospital performance
+            Not just chatbots. A coordinated team of specialized agents that run your hospital 24/7.
           </p>
         </motion.div>
 
         {/* Agents Grid */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10 relative perspective-1000"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 relative perspective-1000"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }} // Removed margin to fix visibility issues
+          viewport={{ once: true }}
           style={{ perspective: "1000px" }}
         >
           {/* Connection Lines (Desktop only) */}
