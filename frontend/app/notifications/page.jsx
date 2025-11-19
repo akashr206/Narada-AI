@@ -3,7 +3,7 @@ import NotificationList from "@/components/extra/notifications/NotificationList"
 
 export default function NotificationsPage() {
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 md:p-12">
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 md:p-12">
             <div className="max-w-4xl mx-auto space-y-8">
                 <div className="space-y-2">
                     <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">

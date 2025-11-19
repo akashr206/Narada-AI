@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { UserPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import StaffMetrics from "@/components/extra/staff-management/staff-metrics";
 import StaffList from "@/components/extra/staff-management/staff-list";
+import AddStaffDialog from "@/components/extra/staff-management/add-staff-dialog";
 
 export default function StaffManagementPage() {
     return (
@@ -19,10 +17,7 @@ export default function StaffManagementPage() {
                         Manage hospital staff, schedules, and assignments
                     </p>
                 </div>
-                <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg flex items-center justify-center gap-2">
-                    <UserPlus className="h-4 w-4" />
-                    <span>Add Staff Member</span>
-                </Button>
+                <AddStaffDialog />
             </div>
 
             {/* Metrics Section */}
