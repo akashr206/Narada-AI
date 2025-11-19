@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
-import { SidebarOpenProvider } from "./hooks/useSidebar";
+import { SidebarOpenProvider } from "@/hooks/useSidebar";
 import LayoutContent from "./LayoutContent"; // ← import client component
 
 const geistSans = Geist({
