@@ -13,10 +13,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import ThemeToggle from "./ThemeToggle";
+import { useSession, signOut } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navbar() {
     const [notificationCount] = useState(3);
     const { toggleSidebar } = useSidebarOpen();
+    const { data: session } = useSession();
 
     return (
         <nav className="sticky top-0 z-40 border-b  border-zinc-200 px-2 bg-white dark:border-zinc-700 dark:bg-zinc-950">
@@ -75,15 +78,18 @@ export default function Navbar() {
                             >
                                 <div className="text-right hidden sm:block">
                                     <p className="text-sm font-medium text-zinc-900 dark:text-white">
-                                        User
+                                        {session?.user?.name || "User"}
                                     </p>
                                     <p className="text-xs text-zinc-500 dark:text-zinc-400">
                                         Administrator
                                     </p>
                                 </div>
-                                <div className="h-10 w-10 rounded-full bg-blue-500 dark:bg-blue-600 flex items-center justify-center text-white font-semibold">
-                                    User
-                                </div>
+                                <Avatar>
+                                    <AvatarImage src={session?.user?.image} />
+                                    <AvatarFallback>
+                                        {session?.user?.name?.[0] || "U"}
+                                    </AvatarFallback>
+                                </Avatar>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
@@ -97,7 +103,10 @@ export default function Navbar() {
                                 </DropdownMenuItem>
                             </a>
                             <DropdownMenuSeparator className="dark:bg-zinc-700" />
-                            <DropdownMenuItem className="flex items-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50 dark:text-red-400 dark:focus:bg-red-900/20 cursor-pointer">
+                            <DropdownMenuItem
+                                className="flex items-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50 dark:text-red-400 dark:focus:bg-red-900/20 cursor-pointer"
+                                onClick={() => signOut({ callbackUrl: "/" })}
+                            >
                                 <LogOut className="h-4 w-4" />
                                 <span>Sign Out</span>
                             </DropdownMenuItem>

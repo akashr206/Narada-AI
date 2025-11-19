@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { API_URL } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
+import { API_URL } from "@/lib/utils2";
 import StaffTableSkeleton from "./staff-skeleton";
 
 export default function StaffList() {

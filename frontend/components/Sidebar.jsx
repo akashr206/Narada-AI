@@ -92,8 +92,8 @@ export default function Sidebar() {
                                 onClick={closeSidebarMobile}
                                 className="flex items-center gap-3"
                             >
-                                <div className="h-10 w-10 rounded-lg bg-blue-600 dark:bg-blue-500 flex items-center justify-center overflow-hidden">
-                                    <Image
+                                <div className="h-10 w-10 rounded-lg bg-zinc-200/80 dark:bg-zinc-800 flex items-center justify-center overflow-hidden">
+                                    <img
                                         src="/logo.png"
                                         alt="Narada AI Logo"
                                         width={40}

@@ -12,7 +12,7 @@ import {
     ChevronDown,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { API_URL } from "@/lib/utils";
+import { API_URL } from "@/lib/utils2";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 

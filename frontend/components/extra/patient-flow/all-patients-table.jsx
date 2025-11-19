@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "../../ui/button";
-import { API_URL } from "@/lib/utils";
+import { API_URL } from "@/lib/utils2";
 
 export default function AllPatientsTable() {
     const [patients, setPatients] = useState([]);

@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import InventoryItem from "../inventory-item";
 import InventorySearch from "../inventory-search";
-import { API_URL } from "@/lib/utils";
+import { API_URL } from "@/lib/utils2";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function InventoryList() {

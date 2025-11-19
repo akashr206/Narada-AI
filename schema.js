@@ -13,7 +13,7 @@ export const patients = pgTable("patients", {
     doctor: varchar("doctor", { length: 255 }).notNull(),
     admissionTime: text("admission_time").notNull(),
 });
- 
+
 export const staff = pgTable("staff", {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
@@ -45,7 +45,6 @@ export const department = pgTable("department", {
     status: varchar("status", { length: 50 }).notNull(),
 });
 
-
 export const activityLog = pgTable("activity_log", {
     id: serial("id").primaryKey(),
     timestamp: varchar("timestamp", { length: 50 }).notNull(),
@@ -56,4 +55,15 @@ export const activityLog = pgTable("activity_log", {
     details: varchar("details", { length: 200 }).notNull(),
     impact: varchar("impact", { length: 50 }).notNull(),
 });
- 
+
+export const users = pgTable("users", {
+    id: serial("id").primaryKey(),
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    name: varchar("name", { length: 255 }).notNull(),
+    image: varchar("image", { length: 500 }),
+    hospitalName: varchar("hospital_name", { length: 255 }),
+    location: varchar("location", { length: 255 }),
+    adminName: varchar("admin_name", { length: 255 }),
+    isOnboarded: integer("is_onboarded").default(0).notNull(), // 0 for false, 1 for true
+    createdAt: varchar("created_at", { length: 50 }).notNull(),
+});

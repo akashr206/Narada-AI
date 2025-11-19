@@ -5,7 +5,6 @@ import Problem from '../components/landing/problem';
 import Workflow from '../components/landing/workflow';
 import Features from '../components/landing/features';
 import Agents from '../components/landing/agents';
-import Testimonials from '../components/landing/testimonials';
 import CTA from '../components/landing/cta';
 import Footer from '../components/landing/footer';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -30,7 +29,6 @@ export default function LandingPage() {
         <span className="font-bold text-lg tracking-tight">Narada AI</span>
       </div>
 
-      {/* Theme Toggle */}
       <div className="fixed top-6 right-6 z-50">
         <ThemeToggle />
       </div>

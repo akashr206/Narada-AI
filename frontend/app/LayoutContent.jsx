@@ -9,7 +9,14 @@ export default function LayoutContent({ children }) {
     const { openSidebar } = useSidebarOpen();
     const pathname = usePathname();
 
-    if (pathname === "/") {
+    const disableSidebar = [
+        "/",
+        "/auth/signin",
+        "/auth/signup",
+        "/onboarding",
+    ].includes(pathname);
+
+    if (disableSidebar) {
         return <main>{children}</main>;
     }
 
