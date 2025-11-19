@@ -44,7 +44,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Right Section */}
-                <div className="flex items-center gap-6 ml-auto">
+                <div className="flex items-center gap-3 ml-auto">
                     <ThemeToggle />
 
                     {/* Notifications */}

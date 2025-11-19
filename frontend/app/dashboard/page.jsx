@@ -1,8 +1,8 @@
 "use client"
 
-import StatCard from "@/components/extra/stat-card"
-import ActivityFeedItem from "@/components/extra/activity-feed-item"
-import ManualOverrideButton from "@/components/extra/manual-override-button"
+import StatCard from "@/components/extra/dashboard/stat-card"
+import ActivityFeedItem from "@/components/extra/dashboard/activity-feed-item"
+import ManualOverrideButton from "@/components/extra/dashboard/manual-override-button"
 import {
   Users,
   UserCheck,
@@ -16,9 +16,9 @@ import {
 
 export default function DashboardPage() {
   return (
-    <div className="p-4 sm:p-6 lg:p-8 w-full max-w-[1700px] mx-auto">
+    <div className="sm:p-6 lg:p-8 w-full max-w-[1700px] mx-auto">
       {/* Page Header */}
-      <div className="mb-6 sm:mb-8 text-center sm:text-left">
+      <div className="mb-6 sm:mb-8  sm:text-left">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
           Operations Dashboard
         </h1>

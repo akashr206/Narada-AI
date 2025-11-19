@@ -2,18 +2,18 @@
 
 import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
-import InventoryMetrics from '@/components/extra/inventory-metrics';
-import InventoryList from '@/components/extra/inventory-list';
+import InventoryMetrics from '@/components/extra/inventory/inventory-metrics';
+import InventoryList from '@/components/extra/inventory/inventory-list';
 import { Button } from '../../components/ui/button';
 
 export default function InventoryPage() {
   return (
     <main className="flex-1 min-h-screen bg-gray-50 dark:bg-gray-950">
-      <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-8">
+      <div className="w-full sm:px-4 md:px-6 lg:px-8 sm:py-4 md:py-6 lg:py-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white truncate">
+            <h1 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white truncate">
               Inventory Management
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 mt-1">

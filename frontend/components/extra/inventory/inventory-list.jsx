@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import InventoryItem from './inventory-item';
-import InventorySearch from './inventory-search';
+import InventoryItem from '../inventory-item';
+import InventorySearch from '../inventory-search';
 
 export default function InventoryList() {
   const [searchTerm, setSearchTerm] = useState('');

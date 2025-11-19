@@ -8,7 +8,7 @@ export default function ActivityLogMetrics() {
       icon: BarChart3,
       title: "Total Events",
       value: "1,247",
-      bgColor: "bg-gray-100 dark:bg-gray-800 border-1 border-gray-400 dark:border-gray-700",
+      bgColor: "bg-gray-100 dark:bg-gray-800 border-1 border-gray-400 dark:border-gray-500",
       textColor: "text-gray-900 dark:text-gray-100",
       iconBgColor: "bg-gray-200 dark:bg-gray-700"
     },

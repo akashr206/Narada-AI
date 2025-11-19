@@ -187,7 +187,7 @@ const AIDecisionLog = () => {
         <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-6">
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-1 truncate">
+              <h1 className="text-3xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-1 truncate">
                 AI Decision Log
               </h1>
               <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400">
