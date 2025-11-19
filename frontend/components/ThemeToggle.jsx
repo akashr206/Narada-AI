@@ -1,6 +1,7 @@
 "use client";
-import { Button } from "./ui/button";
-import { Sun, Moon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -8,35 +9,32 @@ const ThemeToggle = () => {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
-    function getTheme() {
-        return localStorage.getItem("theme");
-    }
-
-    function set() {
-        const newTheme = theme === "dark" ? "light" : "dark";
-        setTheme(newTheme);
-        localStorage.setItem("theme", newTheme);
-    }
     useEffect(() => {
-        setTheme(getTheme());
         setMounted(true);
-    }, [mounted]);
+    }, []);
+
+    if (!mounted) {
+        return (
+            <Button variant="ghost" size="icon" className="rounded-full opacity-0">
+                <Sun className="h-5 w-5" />
+            </Button>
+        );
+    }
 
     return (
-        <div>
-            {mounted ? (
-                <Button
-                    className={"rounded-full"}
-                    onClick={set}
-                    variant={"ghost"}
-                >
-                    {" "}
-                    {theme === "dark" ? <Moon /> : <Sun />}
-                </Button>
+        <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        >
+            {theme === "dark" ? (
+                <Moon className="h-5 w-5 text-zinc-300" />
             ) : (
-                " "
+                <Sun className="h-5 w-5 text-zinc-600" />
             )}
-        </div>
+            <span className="sr-only">Toggle theme</span>
+        </Button>
     );
 };
 

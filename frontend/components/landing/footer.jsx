@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="bg-background border-t border-slate-200 dark:border-slate-800 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between gap-12 mb-12">
+        <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-12 mb-12">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
