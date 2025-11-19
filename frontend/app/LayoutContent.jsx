@@ -10,7 +10,7 @@ export default function LayoutContent({ children }) {
     const pathname = usePathname();
 
     if (pathname === "/") {
-        return <main className=" p-6">{children}</main>;
+        return <main>{children}</main>;
     }
 
     return (
