@@ -23,15 +23,16 @@ const SIDEBAR_ITEMS = [
         items: [
             { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
             { label: "Patient Flow", icon: Users, href: "/patient-flow" },
-            { label: "Staff Management", icon: UserCheck, href: "/staff-management" },
+            {
+                label: "Staff Management",
+                icon: UserCheck,
+                href: "/staff-management",
+            },
             { label: "Inventory", icon: Package, href: "/inventory" },
             { label: "AI Decisions", icon: Lightbulb, href: "/ai-decisions" },
             { label: "Activity Log", icon: Activity, href: "/activity-log" },
+            { label: "Settings", icon: Settings, href: "/settings" },
         ],
-    },
-    {
-        section: "Settings",
-        items: [{ label: "Settings", icon: Settings, href: "/settings" }],
     },
 ];
 
@@ -71,7 +72,7 @@ export default function Sidebar() {
             <AnimatePresence>
                 {openSidebar && (
                     <motion.div
-                        initial={{ x: -300, opacity: 0 }}
+                        initial={{ x: -50, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -300, opacity: 0 }}
                         transition={{ type: "tween" }}
@@ -80,12 +81,16 @@ export default function Sidebar() {
                         className={`
                             z-[999] h-screen w-[300px]
                             border-r border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 
-                            fixed md:static top-0 left-0
+                            fixed top-0 left-0
                         `}
                     >
                         {/* Sidebar Header */}
-                        <div className="h-20 border-b border-zinc-200 dark:border-zinc-700 px-6 flex items-center justify-between">
-                            <Link href="/" onClick={closeSidebarMobile} className="flex items-center gap-3">
+                        <div className="h-20 px-6 flex items-center justify-between">
+                            <Link
+                                href="/"
+                                onClick={closeSidebarMobile}
+                                className="flex items-center gap-3"
+                            >
                                 <div className="h-10 w-10 rounded-lg bg-blue-600 dark:bg-blue-500 flex items-center justify-center">
                                     <Briefcase className="h-6 w-6 text-white" />
                                 </div>
@@ -103,7 +108,7 @@ export default function Sidebar() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={toggleSidebar}
+                                onClick={closeSidebarMobile}
                                 className="md:hidden hover:bg-zinc-100 dark:hover:bg-zinc-800"
                             >
                                 <X className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
@@ -114,11 +119,11 @@ export default function Sidebar() {
                         <nav className="overflow-y-auto px-3 py-4 space-y-8 scrollbar-none overscroll-contain">
                             {SIDEBAR_ITEMS.map((section) => (
                                 <div key={section.section}>
-                                    <p className="mb-3 px-4 text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400">
+                                    <p className="mb-3 mx-2 text-xs font-bold uppercase text-muted-foreground">
                                         {section.section}
                                     </p>
 
-                                    <div className="space-y-1">
+                                    <div className="space-y-1 flex flex-col">
                                         {section.items.map((item) => {
                                             const Icon = item.icon;
                                             const active = isActive(item.href);
@@ -127,7 +132,7 @@ export default function Sidebar() {
                                                 <Link
                                                     key={item.href}
                                                     href={item.href}
-                                                    onClick={closeSidebarMobile} 
+                                                    onClick={closeSidebarMobile}
                                                 >
                                                     <Button
                                                         variant="ghost"
@@ -139,7 +144,7 @@ export default function Sidebar() {
                                                             }
                                                         `}
                                                     >
-                                                        <Icon className="h-5 w-5 flex-shrink-0" />
+                                                        <Icon className="h-5 w-5 shrink-0" />
                                                         {item.label}
                                                     </Button>
                                                 </Link>

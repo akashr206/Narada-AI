@@ -1,29 +1,29 @@
 "use client";
-
+import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { useSidebarOpen } from "@/hooks/useSidebar";
+import { usePathname } from "next/navigation";
 
 export default function LayoutContent({ children }) {
     const { openSidebar } = useSidebarOpen();
+    const pathname = usePathname();
+
+    if (pathname === "/") {
+        return <main className=" p-6">{children}</main>;
+    }
 
     return (
-        <div className="flex h-screen">
-
-            {/* Sidebar - desktop stays inline, mobile becomes overlay */}
+        <div className="flex h-screen ">
             <Sidebar />
-
-            {/* Main Content */}
-            <div
-                className={`relative transition-all duration-300 w-full
-                    md:${openSidebar ? "ml-[300px]" : "ml-0"}
+            <motion.div
+                className={`relative transition-all ml-auto duration-300
+                    ${openSidebar ? "md:w-[calc(100%-300px)]" : "ml-0 w-full"}
                 `}
             >
                 <Navbar />
-                <main className="p-6">
-                    {children}
-                </main>
-            </div>
+                <main className=" p-6">{children}</main>
+            </motion.div>
         </div>
     );
 }

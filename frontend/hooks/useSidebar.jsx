@@ -6,7 +6,7 @@ const sidebarOpen = createContext();
 const SidebarOpenProvider = ({ children }) => {
     const [openSidebar, setOpenSidebar] = useState(true);
     const toggleSidebar = () => {
-        setOpenSidebar(!openSidebar);
+        setOpenSidebar((prev) => !prev);
     };
     useEffect(() => {
         const handleResize = () => {
