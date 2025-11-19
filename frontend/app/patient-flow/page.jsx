@@ -4,8 +4,9 @@ import PatientFlowMetrics from "@/components/extra/patient-flow/patient-flow-met
 import DepartmentCapacity from "@/components/extra/patient-flow/department-capacity";
 import PatientQueue from "@/components/extra/patient-flow/patient-queue";
 import AllPatientsTable from "@/components/extra/patient-flow/all-patients-table";
-import { User, ClipboardX } from "lucide-react";
+import { ClipboardX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AddPatientDialog from "@/components/extra/patient-flow/add-patient-dialog";
 
 export default function PatientFlowPage() {
     return (
@@ -21,9 +22,7 @@ export default function PatientFlowPage() {
                         </p>
                     </div>
                     <div className="gap-2 flex flex-col items-center">
-                        <Button className="w-fit  flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors font-medium text-sm sm:text-base">
-                            <User /> New Admission
-                        </Button>
+                        <AddPatientDialog />
                         <Button className="w-fit   flex items-center justify-center gap-2 px-4 sm:px-4 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm sm:text-base">
                             <ClipboardX />
                             Process Discharge
