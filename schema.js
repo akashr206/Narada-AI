@@ -13,7 +13,7 @@ export const patients = pgTable("patients", {
     doctor: varchar("doctor", { length: 255 }).notNull(),
     admissionTime: text("admission_time").notNull(),
 });
-
+ 
 export const staff = pgTable("staff", {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
@@ -35,8 +35,6 @@ export const inventory = pgTable("inventory", {
     total: integer("total").notNull(),
     unit: varchar("unit", { length: 50 }).notNull(),
     minimum: integer("minimum").notNull(),
-    percentage: integer("percentage").notNull(),
-    status: varchar("status", { length: 50 }).notNull(),
 });
 
 export const department = pgTable("department", {

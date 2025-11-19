@@ -64,9 +64,9 @@ export default function InventoryItem({ item }) {
                 <div className="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
                     <div
                         className={`h-full ${getProgressColor(
-                            item.status
+                            item.statuses[0].toLowerCase()
                         )} rounded-full transition-all`}
-                        style={{ width: `${item.percentage}%` }}
+                        style={{ width: `${Math.floor((item.current/item.total)*100)}%` }}
                     />
                 </div>
             </div>
@@ -80,7 +80,7 @@ export default function InventoryItem({ item }) {
                         {item.current} / {item.total} {item.unit}
                     </p>
                     <p className="text-zinc-600 dark:text-zinc-400">
-                        {item.percentage}% capacity
+                        {Math.floor((item.current/item.total)*100)}% capacity
                     </p>
                 </div>
             </div>

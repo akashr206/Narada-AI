@@ -72,48 +72,50 @@ export default function PatientQueue() {
                         key={idx}
                         className="border border-zinc-400 dark:border-zinc-700 rounded-lg p-3 sm:p-4 hover:shadow-md dark:hover:bg-zinc-800 transition-all"
                     >
-                        <div className="flex flex-col gap-3 sm:gap-4">
-                            <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-sm sm:text-base text-zinc-900 dark:text-white truncate">
-                                    {patient.name}
-                                </h3>
-                                <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 truncate">
-                                    {patient.age}y • {patient.department} •{" "}
-                                    {patient.patientId}
-                                </p>
-                                <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1">
-                                    Admitted: {patient.admitted}
-                                </p>
-                            </div>
-
-                            <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                                <span
-                                    className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                                        patient.statusText
-                                    )}`}
-                                >
-                                    {patient.statusText}
-                                </span>
-                                <span
-                                    className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                                        patient.stageText
-                                    )}`}
-                                >
-                                    {patient.stageText}
-                                </span>
-                            </div>
-
-                            <div className="flex flex-col gap-1">
-                                {patient.doctor && (
-                                    <p className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-medium truncate">
-                                        {patient.doctor}
+                        <div className="flex flex-col gap-1 sm:gap-2">
+                            <div className="flex flex-1 justify-between min-w-0">
+                                <div>
+                                    <h3 className="font-semibold text-sm sm:text-base text-zinc-900 dark:text-white truncate">
+                                        {patient.name}
+                                    </h3>
+                                    <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 truncate">
+                                        {patient.age}y • {patient.department} •{" "}
+                                        {patient.patientId}
                                     </p>
-                                )}
-                                {patient.waitTime && (
-                                    <p className="text-xs sm:text-sm text-orange-600 dark:text-orange-400">
-                                        {patient.waitTime}
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1">
+                                        Admitted: {patient.admitted}
                                     </p>
-                                )}
+                                </div>
+                                <div className="flex flex-col items-end gap-2">
+                                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                                        <span
+                                            className={`px-2 sm:px-3 py-1 h-max shrink-0 rounded-full text-xs font-medium ${getStatusColor(
+                                                patient.statusText
+                                            )}`}
+                                        >
+                                            {patient.statusText}
+                                        </span>
+                                        <span
+                                            className={`px-2 sm:px-3 py-1 h-max shrink-0 rounded-full text-xs font-medium ${getStatusColor(
+                                                patient.stageText
+                                            )}`}
+                                        >
+                                            {patient.stageText}
+                                        </span>
+                                    </div>
+                                    <div >
+                                        {patient.doctor && (
+                                            <p className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-medium truncate">
+                                                {patient.doctor}
+                                            </p>
+                                        )}
+                                        {patient.waitTime && (
+                                            <p className="text-xs sm:text-sm text-orange-600 dark:text-orange-400">
+                                                {patient.waitTime}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

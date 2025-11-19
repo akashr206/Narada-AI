@@ -14,109 +14,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { API_URL } from "@/lib/utils";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ActivityLogList() {
     const [selectedFilter, setSelectedFilter] = useState("all");
     const [searchTerm, setSearchTerm] = useState("");
     const [showFilterDropdown, setShowFilterDropdown] = useState(false);
     const [activities, setActivities] = useState([]);
-
-    // const activities = [
-    //     {
-    //         id: 1,
-    //         timestamp: "2024-01-15 14:32:15",
-    //         type: "ai",
-    //         typeLabel: "AI",
-    //         severity: "success",
-    //         severityLabel: "success",
-    //         action: "Staff Schedule Adjusted",
-    //         user: "Narada AI",
-    //         details:
-    //             "Automatically added 2 nurses to ICU due to increased patient load",
-    //         impact: "High",
-    //         impactColor: "text-orange-600 dark:text-orange-400",
-    //     },
-    //     {
-    //         id: 2,
-    //         timestamp: "2024-01-15 14:28:43",
-    //         type: "system",
-    //         typeLabel: "System",
-    //         severity: "info",
-    //         severityLabel: "info",
-    //         action: "Inventory Updated",
-    //         user: "System",
-    //         details: "Received supply delivery: 500 units of surgical masks",
-    //         impact: "Medium",
-    //         impactColor: "text-blue-600 dark:text-blue-400",
-    //     },
-    //     {
-    //         id: 3,
-    //         timestamp: "2024-01-15 14:15:22",
-    //         type: "user",
-    //         typeLabel: "User",
-    //         severity: "warning",
-    //         severityLabel: "warning",
-    //         action: "Manual Override",
-    //         user: "Dr. Sarah Chen",
-    //         details: "Override AI recommendation for patient transfer to ICU",
-    //         impact: "High",
-    //         impactColor: "text-orange-600 dark:text-orange-400",
-    //     },
-    //     {
-    //         id: 4,
-    //         timestamp: "2024-01-15 13:58:09",
-    //         type: "alert",
-    //         typeLabel: "Alert",
-    //         severity: "error",
-    //         severityLabel: "error",
-    //         action: "Critical Supply Low",
-    //         user: "Narada AI",
-    //         details:
-    //             "Oxygen tanks below critical threshold in Emergency Department",
-    //         impact: "Critical",
-    //         impactColor: "text-red-600 dark:text-red-400",
-    //     },
-    //     {
-    //         id: 5,
-    //         timestamp: "2024-01-15 13:45:31",
-    //         type: "ai",
-    //         typeLabel: "AI",
-    //         severity: "success",
-    //         severityLabel: "success",
-    //         action: "Patient Flow Optimized",
-    //         user: "Narada AI",
-    //         details:
-    //             "Redirected 3 patients to alternate departments to reduce wait times",
-    //         impact: "Medium",
-    //         impactColor: "text-blue-600 dark:text-blue-400",
-    //     },
-    //     {
-    //         id: 6,
-    //         timestamp: "2024-01-15 13:30:18",
-    //         type: "system",
-    //         typeLabel: "System",
-    //         severity: "info",
-    //         severityLabel: "info",
-    //         action: "System Update",
-    //         user: "System",
-    //         details: "Database backup completed with warnings",
-    //         impact: "Low",
-    //         impactColor: "text-zinc-600 dark:text-zinc-400",
-    //     },
-    //     {
-    //         id: 7,
-    //         timestamp: "2024-01-15 13:15:47",
-    //         type: "ai",
-    //         typeLabel: "AI",
-    //         severity: "info",
-    //         severityLabel: "info",
-    //         action: "Predictive Alert",
-    //         user: "Narada AI",
-    //         details: "Predicted 20% increase in ER admissions in next 4 hours",
-    //         impact: "Medium",
-    //         impactColor: "text-blue-600 dark:text-blue-400",
-    //     },
-    // ];
+    const [loading, setLoading] = useState(true);
 
     const getTypeIcon = (type) => {
         switch (type) {
@@ -170,17 +75,20 @@ export default function ActivityLogList() {
         try {
             const response = await fetch(`${API_URL}/api/activity-logs`);
             const data = await response.json();
-            console.log(data);
 
             setActivities(data);
         } catch (error) {
             console.error("Error fetching activities:", error);
             toast.error("Error fetching activities");
+        } finally {
+            setLoading(false);
         }
     }
+
     useEffect(() => {
         fetchActivities();
     }, []);
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
@@ -255,8 +163,40 @@ export default function ActivityLogList() {
                             </th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        {filtered.length > 0 ? (
+                        {loading &&
+                            [...Array(6)].map((_, i) => (
+                                <tr
+                                    key={i}
+                                    className="border-b border-zinc-100 dark:border-zinc-700"
+                                >
+                                    <td className="px-3 py-3">
+                                        <Skeleton className="h-4 w-24" />
+                                    </td>
+                                    <td className="px-3 py-3">
+                                        <Skeleton className="h-4 w-16" />
+                                    </td>
+                                    <td className="px-3 py-3">
+                                        <Skeleton className="h-4 w-20" />
+                                    </td>
+                                    <td className="px-3 py-3">
+                                        <Skeleton className="h-4 w-32" />
+                                    </td>
+                                    <td className="px-3 py-3">
+                                        <Skeleton className="h-4 w-24" />
+                                    </td>
+                                    <td className="hidden md:table-cell px-3 py-3">
+                                        <Skeleton className="h-4 w-40" />
+                                    </td>
+                                    <td className="px-3 py-3">
+                                        <Skeleton className="h-4 w-16" />
+                                    </td>
+                                </tr>
+                            ))}
+
+                        {!loading &&
+                            filtered.length > 0 &&
                             filtered.map((activity) => {
                                 const TypeIcon = getTypeIcon(activity.type);
                                 const severityBadge = getSeverityBadge(
@@ -301,8 +241,9 @@ export default function ActivityLogList() {
                                         </td>
                                     </tr>
                                 );
-                            })
-                        ) : (
+                            })}
+
+                        {!loading && filtered.length === 0 && (
                             <tr>
                                 <td
                                     colSpan="7"

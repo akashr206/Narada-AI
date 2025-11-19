@@ -1,118 +1,15 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import InventoryItem from "../inventory-item";
 import InventorySearch from "../inventory-search";
+import { API_URL } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function InventoryList() {
     const [searchTerm, setSearchTerm] = useState("");
-
-    const inventoryItems = [
-        {
-            name: "Syringes (10ml)",
-            statuses: ["CRITICAL", "AUTO-ORDER"],
-            category: "Medical Supplies",
-            location: "Supply Closet A",
-            lastRestocked: "5 days ago",
-            current: 156,
-            total: 2000,
-            unit: "boxes",
-            minimum: 500,
-            percentage: 8,
-            status: "critical",
-        },
-        {
-            name: "Gauze Pads (4x4)",
-            statuses: ["LOW", "AUTO-ORDER"],
-            category: "Medical Supplies",
-            location: "Supply Closet B",
-            lastRestocked: "2 days ago",
-            current: 420,
-            total: 1500,
-            unit: "boxes",
-            minimum: 300,
-            percentage: 28,
-            status: "low",
-        },
-        {
-            name: "Oxygen Cylinders",
-            statuses: ["ADEQUATE"],
-            category: "Equipment",
-            location: "Equipment Bay",
-            lastRestocked: "6 hours ago",
-            current: 34,
-            total: 50,
-            unit: "units",
-            minimum: 20,
-            percentage: 68,
-            status: "adequate",
-        },
-        {
-            name: "Surgical Gloves (Size M)",
-            statuses: ["CRITICAL", "AUTO-ORDER"],
-            category: "PPE",
-            location: "Storage Room A",
-            lastRestocked: "2 days ago",
-            current: 45,
-            total: 1000,
-            unit: "boxes",
-            minimum: 200,
-            percentage: 5,
-            status: "critical",
-        },
-        {
-            name: "N95 Masks",
-            statuses: ["LOW", "AUTO-ORDER"],
-            category: "PPE",
-            location: "Storage Room A",
-            lastRestocked: "1 week ago",
-            current: 380,
-            total: 2000,
-            unit: "boxes",
-            minimum: 300,
-            percentage: 19,
-            status: "low",
-        },
-        {
-            name: "Type O- Blood",
-            statuses: ["ADEQUATE", "AUTO-ORDER"],
-            category: "Blood Products",
-            location: "Blood Bank",
-            lastRestocked: "3 hours ago",
-            current: 23,
-            total: 50,
-            unit: "units",
-            minimum: 15,
-            percentage: 46,
-            status: "adequate",
-        },
-        {
-            name: "Insulin (Regular)",
-            statuses: ["ADEQUATE", "AUTO-ORDER"],
-            category: "Medications",
-            location: "Pharmacy",
-            lastRestocked: "1 day ago",
-            current: 67,
-            total: 100,
-            unit: "vials",
-            minimum: 30,
-            percentage: 67,
-            status: "adequate",
-        },
-        {
-            name: "IV Bags (Normal Saline)",
-            statuses: ["FULL", "AUTO-ORDER"],
-            category: "Medical Supplies",
-            location: "Supply Closet B",
-            lastRestocked: "12 hours ago",
-            current: 890,
-            total: 1000,
-            unit: "units",
-            minimum: 200,
-            percentage: 89,
-            status: "full",
-        },
-    ];
+    const [loading, setLoading] = useState(true);
+    const [inventoryItems, setInventoryItems] = useState([]);
 
     const filteredItems = useMemo(() => {
         if (!searchTerm.trim()) return inventoryItems;
@@ -124,7 +21,24 @@ export default function InventoryList() {
                     .includes(searchTerm.toLowerCase()) ||
                 item.location.toLowerCase().includes(searchTerm.toLowerCase())
         );
-    }, [searchTerm]);
+    }, [searchTerm, inventoryItems]);
+
+    const fetchInventoryItems = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch(API_URL + "/api/inventory");
+            const data = await response.json();
+            setInventoryItems(data);
+            setLoading(false);
+        } catch (error) {
+            console.error("Error fetching inventory items:", error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchInventoryItems();
+    }, []);
 
     return (
         <div className="space-y-4 sm:space-y-6">
@@ -136,11 +50,36 @@ export default function InventoryList() {
             </div>
 
             <div className="space-y-3 sm:space-y-4">
-                {filteredItems.length > 0 ? (
+                {loading &&
+                    [...Array(6)].map((_, idx) => (
+                        <div
+                            key={idx}
+                            className="border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 sm:p-5 bg-white dark:bg-zinc-900"
+                        >
+                            <div className="flex justify-between items-center mb-3">
+                                <Skeleton className="h-5 w-40" />
+                                <Skeleton className="h-5 w-16" />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-32" />
+                                <Skeleton className="h-3 w-24" />
+                            </div>
+
+                            <div className="mt-4">
+                                <Skeleton className="h-2 w-full" />
+                                <Skeleton className="h-2 w-5/6 mt-2" />
+                            </div>
+                        </div>
+                    ))}
+
+                {!loading &&
+                    filteredItems.length > 0 &&
                     filteredItems.map((item, index) => (
                         <InventoryItem key={index} item={item} />
-                    ))
-                ) : (
+                    ))}
+
+                {!loading && filteredItems.length === 0 && (
                     <div className="text-center py-12">
                         <p className="text-zinc-600 dark:text-zinc-400">
                             No supplies found matching your search.

@@ -1,89 +1,12 @@
 "use client";
+
+import { useState, useEffect } from "react";
 import { Button } from "../../ui/button";
+import { API_URL } from "@/lib/utils";
 
 export default function AllPatientsTable() {
-    const patients = [
-        {
-            id: "P001",
-            name: "John Smith",
-            age: 45,
-            department: "Emergency",
-            status: "critical",
-            stage: "in-treatment",
-            doctor: "Dr. Williams",
-            time: "14:30",
-        },
-        {
-            id: "P002",
-            name: "Sarah Johnson",
-            age: 32,
-            department: "Emergency",
-            status: "urgent",
-            stage: "waiting",
-            doctor: "N/A",
-            time: "14:45",
-        },
-        {
-            id: "P003",
-            name: "Michael Chen",
-            age: 67,
-            department: "Cardiology",
-            status: "urgent",
-            stage: "admitted",
-            doctor: "Dr. Patel",
-            time: "09:15",
-        },
-        {
-            id: "P004",
-            name: "Emma Wilson",
-            age: 28,
-            department: "Orthopedics",
-            status: "routine",
-            stage: "waiting",
-            doctor: "N/A",
-            time: "13:30",
-        },
-        {
-            id: "P005",
-            name: "Robert Davis",
-            age: 54,
-            department: "Surgery",
-            status: "critical",
-            stage: "admitted",
-            doctor: "Dr. Martinez",
-            time: "08:00",
-        },
-        {
-            id: "P006",
-            name: "Lisa Anderson",
-            age: 39,
-            department: "Pediatrics",
-            status: "routine",
-            stage: "discharge-ready",
-            doctor: "Dr. Lee",
-            time: "10:30",
-        },
-        {
-            id: "P007",
-            name: "David Brown",
-            age: 71,
-            department: "Emergency",
-            status: "urgent",
-            stage: "waiting",
-            doctor: "N/A",
-            time: "14:55",
-        },
-        {
-            id: "P008",
-            name: "Jennifer Taylor",
-            age: 43,
-            department: "ICU",
-            status: "critical",
-            stage: "admitted",
-            doctor: "Dr. Kumar",
-            time: "06:00",
-        },
-    ];
+    const [patients, setPatients] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const getStatusColor = (status) => {
         const colors = {
@@ -116,8 +39,26 @@ export default function AllPatientsTable() {
         );
     };
 
+    const fetchPatients = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch(API_URL + "/api/patients");
+            const data = await res.json();
+            setPatients(data);
+        } catch (error) {
+            console.error("Error fetching patients:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPatients();
+    }, []);
+
     return (
         <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-400 dark:border-zinc-700 overflow-hidden">
+            
             <div className="hidden md:block overflow-x-auto">
                 <table className="w-full">
                     <thead>
@@ -145,130 +86,140 @@ export default function AllPatientsTable() {
                             </th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        {patients.map((patient, idx) => (
-                            <tr
-                                key={idx}
-                                className="border-b border-zinc-400 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                            >
-                                <td className="px-4 sm:px-6 py-3 sm:py-4">
-                                    <div>
-                                        <p className="font-semibold text-xs sm:text-sm text-zinc-900 dark:text-white truncate">
-                                            {patient.name}
-                                        </p>
-                                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                                            {patient.id} • {patient.age}y
-                                        </p>
-                                    </div>
-                                </td>
-                                <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300">
-                                    {patient.department}
-                                </td>
-                                <td className="px-4 sm:px-6 py-3 sm:py-4">
-                                    <span
-                                        className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium inline-block ${getStatusColor(
-                                            patient.status
-                                        )}`}
-                                    >
-                                        {patient.status}
-                                    </span>
-                                </td>
-                                <td className="px-4 sm:px-6 py-3 sm:py-4">
-                                    <span
-                                        className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium inline-block ${getStageColor(
-                                            patient.stage
-                                        )}`}
-                                    >
-                                        {patient.stage}
-                                    </span>
-                                </td>
-                                <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-blue-600 dark:text-blue-400">
-                                    {patient.doctor}
-                                </td>
-                                <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300">
-                                    {patient.time}
-                                </td>
-                                <td className="px-4 sm:px-6 py-3 sm:py-4">
-                                    <Button className="text-blue-600 bg-white dark:bg-black hover:bg-zinc-300 dark:hover:bg-zinc-900 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium text-xs sm:text-sm">
-                                        View
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
+                        {!loading &&
+                            patients.map((patient, idx) => (
+                                <tr
+                                    key={idx}
+                                    className="border-b border-zinc-400 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                                >
+                                    <td className="px-4 sm:px-6 py-3 sm:py-4">
+                                        <div>
+                                            <p className="font-semibold text-xs sm:text-sm text-zinc-900 dark:text-white truncate">
+                                                {patient.name}
+                                            </p>
+                                            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                                {patient.id} • {patient.age}y
+                                            </p>
+                                        </div>
+                                    </td>
+
+                                    <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300">
+                                        {patient.department}
+                                    </td>
+
+                                    <td className="px-4 sm:px-6 py-3 sm:py-4">
+                                        <span
+                                            className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium inline-block ${getStatusColor(
+                                                patient.status
+                                            )}`}
+                                        >
+                                            {patient.status}
+                                        </span>
+                                    </td>
+
+                                    <td className="px-4 sm:px-6 py-3 sm:py-4">
+                                        <span
+                                            className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium inline-block ${getStageColor(
+                                                patient.stage
+                                            )}`}
+                                        >
+                                            {patient.stage}
+                                        </span>
+                                    </td>
+
+                                    <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-blue-600 dark:text-blue-400">
+                                        {patient.doctor}
+                                    </td>
+
+                                    <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300">
+                                        {patient.time}
+                                    </td>
+
+                                    <td className="px-4 sm:px-6 py-3 sm:py-4">
+                                        <Button className="text-blue-600 bg-white dark:bg-black hover:bg-zinc-300 dark:hover:bg-zinc-900 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium text-xs sm:text-sm">
+                                            View
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>
 
             <div className="md:hidden p-4 space-y-4">
-                {patients.map((patient, idx) => (
-                    <div
-                        key={idx}
-                        className="border border-zinc-400 dark:border-zinc-700 rounded-lg p-4 space-y-3"
-                    >
-                        <div className="flex justify-between items-start gap-2">
-                            <div className="min-w-0 flex-1">
-                                <p className="font-semibold text-sm text-zinc-900 dark:text-white truncate">
-                                    {patient.name}
-                                </p>
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                                    {patient.id} • {patient.age}y
-                                </p>
-                            </div>
-                            <Button className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium text-xs flex-shrink-0">
-                                View
-                            </Button>
-                        </div>
+                {!loading &&
+                    patients.map((patient, idx) => (
+                        <div
+                            key={idx}
+                            className="border border-zinc-400 dark:border-zinc-700 rounded-lg p-4 space-y-3"
+                        >
+                            <div className="flex justify-between items-start gap-2">
+                                <div className="min-w-0 flex-1">
+                                    <p className="font-semibold text-sm text-zinc-900 dark:text-white truncate">
+                                        {patient.name}
+                                    </p>
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                        {patient.id} • {patient.age}y
+                                    </p>
+                                </div>
 
-                        <div className="grid grid-cols-2 gap-3 text-xs">
-                            <div>
-                                <p className="text-zinc-600 dark:text-zinc-400 mb-1">
-                                    Department
-                                </p>
-                                <p className="font-medium text-zinc-900 dark:text-white">
-                                    {patient.department}
-                                </p>
+                                <Button className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium text-xs flex-shrink-0">
+                                    View
+                                </Button>
                             </div>
-                            <div>
-                                <p className="text-zinc-600 dark:text-zinc-400 mb-1">
-                                    Doctor
-                                </p>
-                                <p className="font-medium text-blue-600 dark:text-blue-400">
-                                    {patient.doctor}
-                                </p>
+
+                            <div className="grid grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <p className="text-zinc-600 dark:text-zinc-400 mb-1">
+                                        Department
+                                    </p>
+                                    <p className="font-medium text-zinc-900 dark:text-white">
+                                        {patient.department}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-zinc-600 dark:text-zinc-400 mb-1">
+                                        Doctor
+                                    </p>
+                                    <p className="font-medium text-blue-600 dark:text-blue-400">
+                                        {patient.doctor}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-zinc-600 dark:text-zinc-400 mb-1">
+                                        Time
+                                    </p>
+                                    <p className="font-medium text-zinc-900 dark:text-white">
+                                        {patient.time}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-zinc-600 dark:text-zinc-400 mb-1">
+                                        Status
+                                    </p>
+                                    <span
+                                        className={`px-2 py-0.5 rounded-full text-xs font-medium inline-block ${getStatusColor(
+                                            patient.status
+                                        )}`}
+                                    >
+                                        {patient.status}
+                                    </span>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-zinc-600 dark:text-zinc-400 mb-1">
-                                    Time
-                                </p>
-                                <p className="font-medium text-zinc-900 dark:text-white">
-                                    {patient.time}
-                                </p>
-                            </div>
-                            <div>
-                                <p className="text-zinc-600 dark:text-zinc-400 mb-1">
-                                    Status
-                                </p>
+
+                            <div className="flex flex-wrap gap-2">
                                 <span
-                                    className={`px-2 py-0.5 rounded-full text-xs font-medium inline-block ${getStatusColor(
-                                        patient.status
+                                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${getStageColor(
+                                        patient.stage
                                     )}`}
                                 >
-                                    {patient.status}
+                                    {patient.stage}
                                 </span>
                             </div>
                         </div>
-
-                        <div className="flex flex-wrap gap-2">
-                            <span
-                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${getStageColor(
-                                    patient.stage
-                                )}`}
-                            >
-                                {patient.stage}
-                            </span>
-                        </div>
-                    </div>
-                ))}
+                    ))}
             </div>
         </div>
     );

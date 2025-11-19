@@ -36,10 +36,10 @@ export default function PatientFlowPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                    <div className="md:col-span-2 lg:col-span-3">
+                    <div className="md:col-span-3 lg:col-span-2">
                         <DepartmentCapacity />
                     </div>
-                    <div className="md:col-span-1">
+                    <div className="md:col-span-3 lg:col-span-2">
                         <PatientQueue />
                     </div>
                 </div>

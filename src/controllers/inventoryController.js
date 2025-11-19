@@ -4,7 +4,15 @@ import { eq } from "drizzle-orm";
 
 export const getAllInventory = async (req, res) => {
     try {
-        const allInventory = await db.select().from(inventory);
+        let allInventory = await db.select().from(inventory);
+        allInventory = allInventory.map((item) => {
+            let temp = JSON.parse(JSON.stringify(item));
+            temp.statuses = JSON.parse(
+                temp.statuses.replace(/{/g, "[").replace(/}/g, "]")
+            );
+            return temp;
+        });
+        
         res.json(allInventory);
     } catch (error) {
         res.status(500).json({ error: error.message });

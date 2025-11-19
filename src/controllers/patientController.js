@@ -31,6 +31,8 @@ export const bulkCreatePatients = async (req, res) => {
             .returning();
         res.status(201).json(newPatients);
     } catch (error) {
+        console.log(error);
+        
         res.status(500).json({ error: error.message });
     }
 };
