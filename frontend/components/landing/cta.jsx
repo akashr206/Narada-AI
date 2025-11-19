@@ -87,7 +87,7 @@ export default function CTA() {
           />
 
           <div className="relative z-10">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-balance bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-balance bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 pb-1">
               Ready to Transform Your Hospital?
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">

@@ -49,18 +49,20 @@ export default function Navbar() {
 
                     {/* Notifications */}
                     <div className="relative">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="relative h-10 w-10 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                        >
-                            <Bell className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
-                            {notificationCount > 0 && (
-                                <span className="absolute top-0 right-0 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-white">
-                                    {notificationCount}
-                                </span>
-                            )}
-                        </Button>
+                        <a href="/notifications">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="relative h-10 w-10 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                            >
+                                <Bell className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
+                                {notificationCount > 0 && (
+                                    <span className="absolute top-0 right-0 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-white">
+                                        {notificationCount}
+                                    </span>
+                                )}
+                            </Button>
+                        </a>
                     </div>
 
                     {/* Profile Dropdown */}
@@ -88,12 +90,14 @@ export default function Navbar() {
                             align="end"
                             className="w-48 dark:bg-zinc-800 dark:border-zinc-700"
                         >
-                            <DropdownMenuItem className="flex items-center gap-2 dark:text-zinc-300 dark:focus:bg-zinc-700">
-                                <User className="h-4 w-4" />
-                                <span>Profile Settings</span>
-                            </DropdownMenuItem>
+                            <a href="/profile">
+                                <DropdownMenuItem className="flex items-center gap-2 dark:text-zinc-300 dark:focus:bg-zinc-700 cursor-pointer">
+                                    <User className="h-4 w-4" />
+                                    <span>Profile Settings</span>
+                                </DropdownMenuItem>
+                            </a>
                             <DropdownMenuSeparator className="dark:bg-zinc-700" />
-                            <DropdownMenuItem className="flex items-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50 dark:text-red-400 dark:focus:bg-red-900/20">
+                            <DropdownMenuItem className="flex items-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50 dark:text-red-400 dark:focus:bg-red-900/20 cursor-pointer">
                                 <LogOut className="h-4 w-4" />
                                 <span>Sign Out</span>
                             </DropdownMenuItem>

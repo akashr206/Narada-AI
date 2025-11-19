@@ -128,7 +128,7 @@ export default function Features() {
             {/* Right Column: Visual Content */}
             <div className="w-full lg:w-1/2 relative h-[400px] sm:h-[500px] flex items-center justify-center">
                {/* Background Gradients */}
-               <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background z-10 pointer-events-none" />
+               <div className="absolute inset-0  z-10 pointer-events-none" />
                
                <AnimatePresence mode="wait">
                  <motion.div

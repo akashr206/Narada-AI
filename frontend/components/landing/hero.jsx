@@ -92,29 +92,29 @@ export default function Hero() {
         {/* Main Heading */}
         <motion.h1
           variants={itemVariants}
-          className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 pb-2"
         >
-          Transform Hospital
+          Multi-Agent, AI-Driven
           <br />
-          <span className="text-primary">Operations Instantly</span>
+          <span className="text-primary">Hospital Operations</span>
         </motion.h1>
 
         {/* Subheading */}
         <motion.p
           variants={itemVariants}
-          className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance leading-relaxed"
+          className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance leading-relaxed px-4 sm:px-0"
         >
-          Intelligent automation for patient scheduling, staff coordination, and inventory management. Experience healthcare efficiency redefined.
+          Autonomous prediction, workflow adjustment, and continuous learning. Narada AI transforms hospital operations from reactive to proactive.
         </motion.p>
 
         {/* CTA Buttons */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0"
         >
-          <Link href="/signup">
+          <Link href="/signup" className="w-full sm:w-auto">
             <motion.button
-              className="px-6 sm:px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold inline-flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-primary/90 transition-all duration-300 shadow-lg shadow-primary/20"
+              className="px-6 sm:px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold inline-flex items-center justify-center gap-2 w-full hover:bg-primary/90 transition-all duration-300 shadow-lg shadow-primary/20"
               whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)" }}
               whileTap={{ scale: 0.98 }}
             >
@@ -122,9 +122,9 @@ export default function Hero() {
               <ArrowRight className="w-4 h-4" />
             </motion.button>
           </Link>
-          <Link href="/signin">
+          <Link href="/signin" className="w-full sm:w-auto">
             <motion.button
-              className="px-6 sm:px-8 py-3 border border-slate-200 dark:border-slate-800 rounded-lg font-semibold text-foreground hover:bg-secondary/50 transition-all duration-300 w-full sm:w-auto backdrop-blur-sm"
+              className="px-6 sm:px-8 py-3 border border-slate-200 dark:border-slate-800 rounded-lg font-semibold text-foreground hover:bg-secondary/50 transition-all duration-300 w-full backdrop-blur-sm"
               whileHover={{ scale: 1.05, backgroundColor: "rgba(var(--secondary), 0.1)" }}
               whileTap={{ scale: 0.98 }}
             >
@@ -136,22 +136,22 @@ export default function Hero() {
         {/* Stats */}
         <motion.div
           variants={itemVariants}
-          className="grid grid-cols-3 gap-4 sm:gap-6 mt-12 sm:mt-16 pt-12 sm:pt-16 border-t border-slate-200 dark:border-slate-800"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 mt-12 sm:mt-16 pt-12 sm:pt-16 border-t border-slate-200 dark:border-slate-800 px-4 sm:px-0"
         >
           {[
-            { value: '40%', label: 'Wait Time Reduction' },
-            { value: '24/7', label: 'AI Monitoring' },
-            { value: '100%', label: 'Automation' },
+            { value: '30-40%', label: 'Wait Time Reduction' },
+            { value: '100%', label: 'Staff Optimization' },
+            { value: '24/7', label: 'Automated Inventory' },
           ].map((stat, i) => (
             <motion.div
               key={i}
               whileHover={{ y: -5, scale: 1.05 }}
               className="text-center group cursor-default"
             >
-              <div className="text-2xl sm:text-3xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform duration-300">
+              <div className="text-3xl sm:text-3xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform duration-300">
                 {stat.value}
               </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 {stat.label}
               </div>
             </motion.div>
