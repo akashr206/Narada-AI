@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, Search, LogOut, User, Menu } from "lucide-react";
+import { Search, LogOut, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSidebarOpen } from "@/hooks/useSidebar";
 import {
@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import ThemeToggle from "./ThemeToggle";
+import NotificationDropdown from "./extra/notifications/NotificationDropdown";
 import { useSession, signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navbar() {
-    const [notificationCount] = useState(3);
     const { toggleSidebar } = useSidebarOpen();
     const { data: session } = useSession();
 
@@ -52,20 +52,7 @@ export default function Navbar() {
 
                     {/* Notifications */}
                     <div className="relative">
-                        <a href="/notifications">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="relative h-10 w-10 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                            >
-                                <Bell className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
-                                {notificationCount > 0 && (
-                                    <span className="absolute top-0 right-0 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-white">
-                                        {notificationCount}
-                                    </span>
-                                )}
-                            </Button>
-                        </a>
+                        <NotificationDropdown />
                     </div>
 
                     {/* Profile Dropdown */}
@@ -78,10 +65,10 @@ export default function Navbar() {
                             >
                                 <div className="text-right hidden sm:block">
                                     <p className="text-sm font-medium text-zinc-900 dark:text-white">
-                                        {session?.user?.name || "User"}
+                                        City General Hospital
                                     </p>
                                     <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                                        Administrator
+                                        Hospital Admin
                                     </p>
                                 </div>
                                 <Avatar>
