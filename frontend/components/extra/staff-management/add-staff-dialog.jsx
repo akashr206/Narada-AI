@@ -24,11 +24,33 @@ import {
 
 export default function AddStaffDialog() {
     const [open, setOpen] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        role: "",
+        department: "",
+        currentShift: "",
+        nextShift: "",
+    });
+
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [id]: value,
+        }));
+    };
+
+    const handleSelectChange = (field, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log("Form submitted");
+        console.log("Staff Data:", formData);
+        // Logic to be added later
         setOpen(false);
     };
 
@@ -52,6 +74,8 @@ export default function AddStaffDialog() {
                         <Label htmlFor="name" className="text-zinc-900 dark:text-zinc-50">Name</Label>
                         <Input
                             id="name"
+                            value={formData.name}
+                            onChange={handleChange}
                             placeholder="e.g. Dr. Sarah Wilson"
                             className="col-span-3 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-blue-600"
                             required
@@ -59,7 +83,7 @@ export default function AddStaffDialog() {
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="role" className="text-zinc-900 dark:text-zinc-50">Role</Label>
-                        <Select required>
+                        <Select required value={formData.role} onValueChange={(value) => handleSelectChange("role", value)}>
                             <SelectTrigger className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-blue-600">
                                 <SelectValue placeholder="Select role" />
                             </SelectTrigger>
@@ -74,7 +98,7 @@ export default function AddStaffDialog() {
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="department" className="text-zinc-900 dark:text-zinc-50">Department</Label>
-                        <Select required>
+                        <Select required value={formData.department} onValueChange={(value) => handleSelectChange("department", value)}>
                             <SelectTrigger className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-blue-600">
                                 <SelectValue placeholder="Select department" />
                             </SelectTrigger>
@@ -90,7 +114,7 @@ export default function AddStaffDialog() {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="currentShift" className="text-zinc-900 dark:text-zinc-50">Current Shift</Label>
-                            <Select required>
+                            <Select required value={formData.currentShift} onValueChange={(value) => handleSelectChange("currentShift", value)}>
                                 <SelectTrigger className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-blue-600">
                                     <SelectValue placeholder="Select shift" />
                                 </SelectTrigger>
@@ -103,7 +127,7 @@ export default function AddStaffDialog() {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="nextShift" className="text-zinc-900 dark:text-zinc-50">Next Shift</Label>
-                            <Select required>
+                            <Select required value={formData.nextShift} onValueChange={(value) => handleSelectChange("nextShift", value)}>
                                 <SelectTrigger className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-blue-600">
                                     <SelectValue placeholder="Select shift" />
                                 </SelectTrigger>

@@ -24,12 +24,38 @@ import {
 
 export default function AddPatientDialog() {
     const [open, setOpen] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        age: "",
+        gender: "",
+        phone: "",
+        email: "",
+        department: "",
+        status: "",
+        stage: "",
+        admissionTime: "",
+        doctor: "",
+    });
+
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [id]: value,
+        }));
+    };
+
+    const handleSelectChange = (field, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e);
-        
-        console.log("Form submitted");
+        console.log("Patient Data:", formData);
+        // Logic to be added later
         setOpen(false);
     };
 
@@ -57,6 +83,8 @@ export default function AddPatientDialog() {
                             <Label htmlFor="name" className="text-zinc-900 dark:text-zinc-50">Name</Label>
                             <Input
                                 id="name"
+                                value={formData.name}
+                                onChange={handleChange}
                                 placeholder="John Doe"
                                 className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-blue-600"
                                 required
@@ -67,6 +95,8 @@ export default function AddPatientDialog() {
                             <Input
                                 id="age"
                                 type="number"
+                                value={formData.age}
+                                onChange={handleChange}
                                 placeholder="30"
                                 className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-blue-600"
                                 required
@@ -77,7 +107,7 @@ export default function AddPatientDialog() {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="gender" className="text-zinc-900 dark:text-zinc-50">Gender</Label>
-                            <Select required>
+                            <Select required value={formData.gender} onValueChange={(value) => handleSelectChange("gender", value)}>
                                 <SelectTrigger className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-blue-600">
                                     <SelectValue placeholder="Select gender" />
                                 </SelectTrigger>
@@ -92,6 +122,8 @@ export default function AddPatientDialog() {
                             <Label htmlFor="phone" className="text-zinc-900 dark:text-zinc-50">Phone</Label>
                             <Input
                                 id="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
                                 placeholder="+1 234 567 890"
                                 className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-blue-600"
                                 required
@@ -104,6 +136,8 @@ export default function AddPatientDialog() {
                         <Input
                             id="email"
                             type="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="john.doe@example.com"
                             className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-blue-600"
                             required
@@ -113,7 +147,7 @@ export default function AddPatientDialog() {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="department" className="text-zinc-900 dark:text-zinc-50">Department</Label>
-                            <Select required>
+                            <Select required value={formData.department} onValueChange={(value) => handleSelectChange("department", value)}>
                                 <SelectTrigger className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-blue-600">
                                     <SelectValue placeholder="Select department" />
                                 </SelectTrigger>
@@ -128,7 +162,7 @@ export default function AddPatientDialog() {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="status" className="text-zinc-900 dark:text-zinc-50">Status</Label>
-                            <Select required>
+                            <Select required value={formData.status} onValueChange={(value) => handleSelectChange("status", value)}>
                                 <SelectTrigger className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-blue-600">
                                     <SelectValue placeholder="Select status" />
                                 </SelectTrigger>
@@ -145,7 +179,7 @@ export default function AddPatientDialog() {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="stage" className="text-zinc-900 dark:text-zinc-50">Stage</Label>
-                            <Select required>
+                            <Select required value={formData.stage} onValueChange={(value) => handleSelectChange("stage", value)}>
                                 <SelectTrigger className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-blue-600">
                                     <SelectValue placeholder="Select stage" />
                                 </SelectTrigger>
@@ -162,6 +196,8 @@ export default function AddPatientDialog() {
                             <Input
                                 id="admissionTime"
                                 type="datetime-local"
+                                value={formData.admissionTime}
+                                onChange={handleChange}
                                 className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-blue-600"
                                 required
                             />
@@ -172,6 +208,8 @@ export default function AddPatientDialog() {
                         <Label htmlFor="doctor" className="text-zinc-900 dark:text-zinc-50">Doctor</Label>
                         <Input
                             id="doctor"
+                            value={formData.doctor}
+                            onChange={handleChange}
                             placeholder="Dr. Smith"
                             className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-blue-600"
                             required
