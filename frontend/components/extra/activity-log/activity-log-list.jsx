@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { API_URL } from "@/lib/utils2";
 import { toast } from "sonner";
+import { useHospitalId } from "@/context/HospitalIdContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ActivityLogList() {
@@ -22,6 +23,7 @@ export default function ActivityLogList() {
     const [showFilterDropdown, setShowFilterDropdown] = useState(false);
     const [activities, setActivities] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { loading: hospitalIdLoading, hospitalId } = useHospitalId();
 
     const getTypeIcon = (type) => {
         switch (type) {
@@ -86,8 +88,9 @@ export default function ActivityLogList() {
     }
 
     useEffect(() => {
-        fetchActivities();
-    }, []);
+        if (!hospitalIdLoading) fetchActivities();
+        console.log(hospitalId);
+    }, [hospitalId]);
 
     return (
         <div className="space-y-4">

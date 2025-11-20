@@ -62,8 +62,9 @@ export const users = pgTable("users", {
     name: varchar("name", { length: 255 }).notNull(),
     image: varchar("image", { length: 500 }),
     hospitalName: varchar("hospital_name", { length: 255 }),
+    hospitalId: varchar("hospital_id", { length: 255 }),
     location: varchar("location", { length: 255 }),
     adminName: varchar("admin_name", { length: 255 }),
-    isOnboarded: integer("is_onboarded").default(0).notNull(), // 0 for false, 1 for true
+    isOnboarded: integer("is_onboarded").default(0).notNull(),
     createdAt: varchar("created_at", { length: 50 }).notNull(),
 });

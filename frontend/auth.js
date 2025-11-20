@@ -19,6 +19,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
+                                
                             },
                             body: JSON.stringify({
                                 email: user.email,

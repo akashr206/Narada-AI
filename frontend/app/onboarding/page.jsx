@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { token } from "@/lib/utils";
 import {
     Card,
     CardContent,
@@ -33,13 +34,17 @@ export default function Onboarding() {
         };
 
         try {
+            const t = await token();
             const response = await fetch(
                 `${
                     process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
                 }/api/auth/onboard`,
                 {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${t}`,
+                    },
                     body: JSON.stringify(data),
                 }
             );

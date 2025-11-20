@@ -27,14 +27,14 @@ export default function AddPatientDialog() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission logic here
+        console.log(e);
+        
         console.log("Form submitted");
         setOpen(false);
     };
 
     const handleSuggestDoctor = () => {
         console.log("Suggesting doctor...");
-        // Logic to suggest doctor would go here
     };
 
     return (

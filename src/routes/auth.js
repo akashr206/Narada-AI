@@ -2,10 +2,10 @@ import express from "express";
 import { db } from "../utils/db.js";
 import { users } from "../../schema.js";
 import { eq } from "drizzle-orm";
+import { v4 as uuid } from "uuid";
 
 const router = express.Router();
 
-// Sync user from Google Auth
 router.post("/sync", async (req, res) => {
     const { email, name, image } = req.body;
 
@@ -42,7 +42,6 @@ router.post("/sync", async (req, res) => {
     }
 });
 
-// Onboard user
 router.post("/onboard", async (req, res) => {
     const { email, hospitalName, location, adminName } = req.body;
 
@@ -57,6 +56,7 @@ router.post("/onboard", async (req, res) => {
                 hospitalName,
                 location,
                 adminName,
+                hospitalId: uuid(),
                 isOnboarded: 1,
             })
             .where(eq(users.email, email))
@@ -69,6 +69,31 @@ router.post("/onboard", async (req, res) => {
         res.json({ user: updatedUser[0] });
     } catch (error) {
         console.error("Error onboarding user:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+router.get("/hospital-id", async (req, res) => {
+    const { email } = req.query;
+
+    if (!email) {
+        return res.status(400).json({ error: "Email is required" });
+    }
+
+    try {
+        const user = await db
+            .select({ hospitalId: users.hospitalId })
+            .from(users)
+            .where(eq(users.email, email))
+            .limit(1);
+
+        if (user.length === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json({ hospitalId: user[0].hospitalId });
+    } catch (error) {
+        console.error("Error getting hospital ID:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
