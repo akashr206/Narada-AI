@@ -13,6 +13,7 @@ import {
     Settings,
     X,
     Briefcase,
+    Bot
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSidebarOpen } from "@/hooks/useSidebar";
@@ -31,7 +32,7 @@ const SIDEBAR_ITEMS = [
             },
             { label: "Inventory", icon: Package, href: "/inventory" },
             { label: "AI Decisions", icon: Lightbulb, href: "/ai-decisions" },
-            { label: "AI Status", icon: Lightbulb, href: "/ai-status" },
+            { label: "AI Status", icon: Bot, href: "/ai-status" },
             { label: "Activity Log", icon: Activity, href: "/activity-log" },
             { label: "Settings", icon: Settings, href: "/settings" },
         ],

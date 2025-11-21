@@ -8,7 +8,6 @@ export const aiClient = new GoogleGenAI({
 
 // helper to call model and normalize result
 export async function callGemini(prompt, options = {}) {
-    console.log(prompt);
 
     const model = options.model || "gemini-2.5-flash-lite";
     const contents = Array.isArray(prompt) ? prompt : [String(prompt)];

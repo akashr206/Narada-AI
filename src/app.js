@@ -78,7 +78,7 @@ app.post("/run_batch", async (req, res) => {
                 for (const [, messages] of reply) {
                     for (const [id, fields] of messages) {
                         const payload = JSON.parse(fields[1]);
-                        console.log(STREAM, ":", payload);
+                        // console.log(STREAM, ":", payload);
 
                         await r.xack(STREAM, batchId, id);
 
@@ -90,8 +90,11 @@ app.post("/run_batch", async (req, res) => {
                             io.emit("batch:completed", {
                                 batchId,
                                 message: "Batch processing completed",
+                                finalPlan: payload.finalPlan,
                             });
                             await r.del(STREAM);
+                            console.log("Batch processing completed", batchId);
+
                             return;
                         }
                     }

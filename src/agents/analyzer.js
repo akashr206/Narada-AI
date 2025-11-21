@@ -5,6 +5,8 @@ import { hospital, wards } from "../../schema.js";
 dotenv.config();
 import { predictLoadNode } from "../langgraph/analyze_graph.js";
 const redisUrl = process.env.REDIS_URL || "redis://127.0.0.1:6379";
+console.log(redisUrl);
+
 import { addToStream } from "../utils/addToStream.js";
 const sub = new Redis(redisUrl);
 const pub = new Redis(redisUrl);
@@ -26,7 +28,7 @@ sub.on("message", async (channel, message) => {
         await addToStream(STREAM, {
             batch: STREAM,
             id: "hospital-data",
-            agent : "Analyzer",
+            agent: "Analyzer",
             status: "fetching",
             message: "Fetching hospital details",
         });
@@ -51,7 +53,7 @@ sub.on("message", async (channel, message) => {
         const state = {
             critical_incidents: req.critical_incidents,
             hospital: hospitalData,
-        }; 
+        };
         const out = await predictLoadNode(state);
         // const out = { analysis: "", raw: "" };
         const finalPlan = {
@@ -61,6 +63,11 @@ sub.on("message", async (channel, message) => {
             raw: out.raw,
             timestamp: Date.now(),
         };
+
+        await pub.publish(
+            "broadcast",
+            JSON.stringify({ type: "final_plan", payload: finalPlan })
+        );
         await addToStream(STREAM, {
             batch: STREAM,
             id: AGENT_ID,
@@ -72,18 +79,8 @@ sub.on("message", async (channel, message) => {
             batch: STREAM,
             id: "exit",
             status: "complete",
+            finalPlan,
         });
-
-        await pub.publish(
-            "broadcast",
-            JSON.stringify({ type: "final_plan", payload: finalPlan })
-        );
-        await pub.xadd(
-            "results:stream",
-            "*",
-            "payload",
-            JSON.stringify({ stage: "final_plan", finalPlan })
-        );
     } catch (e) {
         console.error(e);
     }

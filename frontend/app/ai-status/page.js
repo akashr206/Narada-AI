@@ -13,6 +13,7 @@ export default function Page() {
     const [isRunning, setIsRunning] = useState(false);
     const [error, setError] = useState(null);
     const [batchId, setBatchId] = useState("");
+    const [finalPlan, setFinalPlan] = useState("");
 
     useEffect(() => {
         const handleBatchUpdate = (data) => {
@@ -31,6 +32,9 @@ export default function Page() {
         };
 
         const handleBatchCompleted = (data) => {
+            setFinalPlan(data.finalPlan.raw);
+            console.log(data.finalPlan.raw);
+            
             setUpdates((prev) => ({
                 ...prev,
                 completed: true,
@@ -135,7 +139,7 @@ export default function Page() {
                                             getStatusColor(u.status).split(
                                                 " "
                                             )[1]
-                                        } ${u.id==="exit" && "hidden"}`}
+                                        } ${u.id === "exit" && "hidden"}`}
                                     >
                                         <div>
                                             <p
@@ -169,7 +173,7 @@ export default function Page() {
                                                     : "text-foreground"
                                             )}
                                         >
-                                            {u.message + u.id}
+                                            {u.message}
                                         </p>
                                     </motion.div>
                                 ))}
@@ -180,6 +184,13 @@ export default function Page() {
                             <div className="mt-6 px-4 py-3 bg-emerald-50 border dark:bg-emerald-950/70 dark:border-emerald-800 border-emerald-200 rounded-lg text-center">
                                 <span className="text-emerald-700  dark:text-green-400">
                                     Agentic Cycle Completed Successfully
+                                </span>
+                            </div>
+                        )}
+                        {finalPlan && (
+                            <div className="mt-6 px-4 py-3 bg-emerald-50 border dark:bg-emerald-950/70 dark:border-emerald-800 border-emerald-200 rounded-lg text-center">
+                                <span className="text-emerald-700  dark:text-green-400">
+                                    Final Plan: {finalPlan}
                                 </span>
                             </div>
                         )}
