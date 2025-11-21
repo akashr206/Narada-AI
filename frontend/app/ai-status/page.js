@@ -34,7 +34,7 @@ export default function Page() {
         const handleBatchCompleted = (data) => {
             setFinalPlan(data.finalPlan.raw);
             console.log(data.finalPlan.raw);
-            
+
             setUpdates((prev) => ({
                 ...prev,
                 completed: true,
@@ -55,6 +55,7 @@ export default function Page() {
         setError(null);
         setIsRunning(true);
         setUpdates({});
+        setFinalPlan("");
 
         try {
             const response = await fetch("http://localhost:8000/run_batch", {
@@ -181,10 +182,19 @@ export default function Page() {
                         )}
 
                         {updates.completed && (
-                            <div className="mt-6 px-4 py-3 bg-emerald-50 border dark:bg-emerald-950/70 dark:border-emerald-800 border-emerald-200 rounded-lg text-center">
-                                <span className="text-emerald-700  dark:text-green-400">
-                                    Agentic Cycle Completed Successfully
-                                </span>
+                            <div className="flex gap-2 mt-6 items-center">
+                                <div className=" px-4 py-1.5 flex-1 bg-emerald-50 border dark:bg-emerald-950/70 dark:border-emerald-800 border-emerald-200 rounded-lg text-center">
+                                    <span className="text-emerald-700  dark:text-green-400">
+                                        Agentic Cycle Completed Successfully
+                                    </span>
+                                </div>
+                                <Button
+                                    onClick={startBatch}
+                                    disabled={isRunning}
+                                    className={`bg-blue-500/90 w-full flex-1 text-white hover:bg-blue-600`}
+                                >
+                                    Start Again
+                                </Button>
                             </div>
                         )}
                         {finalPlan && (
