@@ -38,7 +38,6 @@ export default function Hero() {
             ref={ref}
             className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 pb-16 overflow-hidden"
         >
-            {/* Animated Background with Parallax */}
             <motion.div
                 style={{ y: yBackground }}
                 className="absolute inset-0 -z-10 overflow-hidden"
@@ -76,7 +75,6 @@ export default function Hero() {
                 initial="hidden"
                 animate="visible"
             >
-                {/* Badge */}
                 <motion.div
                     variants={itemVariants}
                     whileHover={{ scale: 1.05 }}
@@ -91,7 +89,6 @@ export default function Hero() {
                     </span>
                 </motion.div>
 
-                {/* Main Heading */}
                 <motion.h1
                     variants={itemVariants}
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 pb-2"
@@ -101,7 +98,6 @@ export default function Hero() {
                     <span className="text-primary">Hospital Operations</span>
                 </motion.h1>
 
-                {/* Subheading */}
                 <motion.p
                     variants={itemVariants}
                     className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance leading-relaxed px-4 sm:px-0"
@@ -111,12 +107,11 @@ export default function Hero() {
                     reactive to proactive.
                 </motion.p>
 
-                {/* CTA Buttons */}
                 <motion.div
                     variants={itemVariants}
                     className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0"
                 >
-                    <Link href="/auth/signin" className="w-full sm:w-auto">
+                    <Link href="/dashboard" className="w-full sm:w-auto">
                         <motion.button
                             className="px-6 sm:px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold inline-flex items-center justify-center gap-2 w-full hover:bg-primary/90 transition-all duration-300 shadow-lg shadow-primary/20"
                             whileHover={{
@@ -130,21 +125,8 @@ export default function Hero() {
                             <ArrowRight className="w-4 h-4" />
                         </motion.button>
                     </Link>
-                    <Link href="/auth/signin" className="w-full sm:w-auto">
-                        <motion.button
-                            className="px-6 sm:px-8 py-3 border border-slate-200 dark:border-slate-800 rounded-lg font-semibold text-foreground hover:bg-secondary/50 transition-all duration-300 w-full backdrop-blur-sm"
-                            whileHover={{
-                                scale: 1.05,
-                                backgroundColor: "rgba(var(--secondary), 0.1)",
-                            }}
-                            whileTap={{ scale: 0.98 }}
-                        >
-                            Sign In
-                        </motion.button>
-                    </Link>
                 </motion.div>
 
-                {/* Stats */}
                 <motion.div
                     variants={itemVariants}
                     className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 mt-12 sm:mt-16 pt-12 sm:pt-16 border-t border-slate-200 dark:border-slate-800 px-4 sm:px-0"

@@ -8,7 +8,7 @@ dotenv.config();
 const GDELT_ENABLED = process.env.GDELT_ENABLED === "true";
 // const GDELT_ENABLED = true;
 
-export async function fetchNearbyNews(lat, lon, kmRadius = 50) {
+export async function fetchNearbyNews(lat=0, lon=0, kmRadius = 50) {
     if (GDELT_ENABLED) {
         const q = encodeURIComponent(
             "(accident OR crash OR pollution OR festival OR fire OR 'traffic jam' OR 'stampede')"
@@ -16,7 +16,6 @@ export async function fetchNearbyNews(lat, lon, kmRadius = 50) {
         const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${q}&mode=ArtList&format=json&maxrecords=50`;
         const r = await fetch(url);
         const j = await r.json();
-        console.log(j);
         // GDELT's items may or may not have geocoding; filter conservatively
         const items = (j?.articles ?? j?.articles ?? []).slice(0, 50);
         // try to map into normalized structure if geo available
@@ -81,7 +80,3 @@ export async function fetchNearbyNews(lat, lon, kmRadius = 50) {
         ];
     }
 }
-
-fetchNearbyNews(12.917576, 77.648215).then((news) => {
-    console.log(news);
-});

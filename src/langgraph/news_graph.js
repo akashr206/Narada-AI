@@ -17,11 +17,8 @@ export async function summarizeIncidentsNode(state) {
         `\nInput incidents:\n${JSON.stringify(incidents, null, 2)}\n`,
     ];
     const text = await callGemini(prompt);
-    
     try {
-        const jsonStart = text.indexOf("[");
-        const jsonStr = text.slice(jsonStart);
-        const parsed = JSON.parse(jsonStr);
+        const parsed = JSON.parse(text);
         return { critical_incidents: parsed, raw_summary: text };
     } catch (e) {
         return { critical_incidents: [], raw_summary: text };

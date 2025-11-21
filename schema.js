@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar, integer } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar, integer, timestamp } from "drizzle-orm/pg-core";
 
 export const patients = pgTable("patients", {
     id: serial("id").primaryKey(),
@@ -19,17 +19,13 @@ export const staff = pgTable("staff", {
     name: varchar("name", { length: 255 }).notNull(),
     role: varchar("role", { length: 100 }).notNull(),
     department: varchar("department", { length: 100 }).notNull(),
-    status: varchar("status", { length: 50 }).notNull(),
-    currentShift: varchar("current_shift", { length: 50 }).notNull(),
-    nextShift: varchar("next_shift", { length: 50 }).notNull(),
+    available: integer("available").default(0).notNull(),
 });
 
 export const inventory = pgTable("inventory", {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
-    statuses: varchar("statuses", { length: 50 }).notNull(),
     category: varchar("category", { length: 50 }).notNull(),
-    location: varchar("location", { length: 50 }).notNull(),
     lastRestocked: varchar("last_restocked", { length: 50 }).notNull(),
     current: integer("current").notNull(),
     total: integer("total").notNull(),
@@ -56,15 +52,22 @@ export const activityLog = pgTable("activity_log", {
     impact: varchar("impact", { length: 50 }).notNull(),
 });
 
-export const users = pgTable("users", {
+export const hospital = pgTable("hospital", {
     id: serial("id").primaryKey(),
-    email: varchar("email", { length: 255 }).notNull().unique(),
-    name: varchar("name", { length: 255 }).notNull(),
-    image: varchar("image", { length: 500 }),
-    hospitalName: varchar("hospital_name", { length: 255 }),
-    hospitalId: varchar("hospital_id", { length: 255 }),
-    location: varchar("location", { length: 255 }),
-    adminName: varchar("admin_name", { length: 255 }),
-    isOnboarded: integer("is_onboarded").default(0).notNull(),
-    createdAt: varchar("created_at", { length: 50 }).notNull(),
+    name: text("name").notNull(),
+    totalDoctors: integer("total_doctors").notNull(),
+    totalNurses: integer("total_nurses").notNull(),
+    icuCapacity: integer("icu_capacity").notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const wards = pgTable("wards", {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    capacity: integer("capacity").notNull(),
+    occupied: integer("occupied").notNull(),
+    nurses: integer("nurses").notNull(),
+    doctors: integer("doctors").notNull(),
+    criticality: integer("criticality").notNull(), 
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

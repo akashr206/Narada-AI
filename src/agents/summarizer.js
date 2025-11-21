@@ -2,15 +2,19 @@
 // (we implemented as simple call function in src/langgraph/news_graph.js) and publishes 'analysis_request'.
 import Redis from "ioredis";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config(); 
 import { summarizeIncidentsNode } from "../langgraph/news_graph.js";
-const redisUrl = process.env.REDIS_URL || "redis://127.0.0.1:6379";
+import { db } from "../utils/db.js";
+import { hospital, wards } from "../../schema.js";
+import { addToStream } from "../utils/addToStream.js";
+const redisUrl = process.env.REDIS_URL || "redis://127.0.0.1:6379"; 
+// console.log(redisUrl);
 
 const sub = new Redis(redisUrl);
 const pub = new Redis(redisUrl);
+const r = sub.duplicate();
 
-const AGENT_ID =
-    process.env.AGENT_ID || `summarizer-${Math.floor(Math.random() * 1000)}`;
+const AGENT_ID = `summarizer`;
 
 console.log(`[${AGENT_ID}] subscribing to broadcast...`);
 await sub.subscribe("broadcast");
@@ -18,18 +22,31 @@ await sub.subscribe("broadcast");
 sub.on("message", async (channel, message) => {
     try {
         const msg = JSON.parse(message);
-        console.log(msg);
-        
         if (msg.type !== "summary_request") return;
         const req = msg.payload;
         console.log(
             `[${AGENT_ID}] summarizing task ${req.taskId} from ${req.from}`
         );
+        const STREAM = await r.get("current-stream");
+        console.log("stream : ", STREAM);
 
-        const state = { incidents: req.incidents, hospital: req.hospital };
+        let hospitalData = await db.select().from(hospital);
+        await addToStream(STREAM, {
+            batch: STREAM,
+            agent: "Summarizer",
+            id: AGENT_ID,
+            status: "running",
+            message: "Summarizing the data",
+        });
+        const state = { incidents: req.incidents, hospital: hospitalData };
         const out = await summarizeIncidentsNode(state);
-
-        // publish summarized data to broadcast for analyzer
+        await addToStream(STREAM, {
+            batch: STREAM,
+            id: AGENT_ID,
+            agent: "Summarizer",
+            status: "complete",
+            message: "Summarized all the data.",
+        });
         const analysisReq = {
             id: req.id,
             from: AGENT_ID,
@@ -41,18 +58,6 @@ sub.on("message", async (channel, message) => {
         await pub.publish(
             "broadcast",
             JSON.stringify({ type: "analysis_request", payload: analysisReq })
-        );
-
-        // optionally publish to results stream for manager visibility
-        await pub.xadd(
-            "results:stream",
-            "*",
-            "payload",
-            JSON.stringify({
-                stage: "summarized",
-                agent: AGENT_ID,
-                analysisReq,
-            })
         );
     } catch (e) {
         console.error(e);

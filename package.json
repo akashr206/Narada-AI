@@ -3,10 +3,10 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
-        "start:manager": "node src/manager.js",
-        "start:fetcher": "node src/agents/news_fetcher.js",
-        "start:summarizer": "node src/agents/summarizer.js",
-        "start:analyzer": "node src/agents/analyzer.js",
+        "start:manager": "nodemon src/manager.js",
+        "start:fetcher": "nodemon src/agents/news_fetcher.js",
+        "start:summarizer": "nodemon src/agents/summarizer.js",
+        "start:analyzer": "nodemon src/agents/analyzer.js",
         "start": "nodemon src/app.js"
     },
     "dependencies": {
@@ -21,8 +21,10 @@
         "geolib": "^3.3.3",
         "ioredis": "^5.3.2",
         "jsonwebtoken": "^9.0.2",
+        "nanoid": "^5.1.6",
         "pg": "^8.16.3",
         "postgres": "^3.4.7",
+        "socket.io": "^4.8.1",
         "uuid": "^9.0.1"
     }
 }

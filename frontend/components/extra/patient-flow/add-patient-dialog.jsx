@@ -31,7 +31,6 @@ export default function AddPatientDialog() {
         phone: "",
         email: "",
         department: "",
-        status: "",
         stage: "",
         admissionTime: "",
         doctor: "",
@@ -157,20 +156,6 @@ export default function AddPatientDialog() {
                                     <SelectItem value="neurology">Neurology</SelectItem>
                                     <SelectItem value="pediatrics">Pediatrics</SelectItem>
                                     <SelectItem value="surgery">Surgery</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="status" className="text-zinc-900 dark:text-zinc-50">Status</Label>
-                            <Select required value={formData.status} onValueChange={(value) => handleSelectChange("status", value)}>
-                                <SelectTrigger className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-blue-600">
-                                    <SelectValue placeholder="Select status" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="admitted">Admitted</SelectItem>
-                                    <SelectItem value="discharged">Discharged</SelectItem>
-                                    <SelectItem value="transfer">Transfer</SelectItem>
-                                    <SelectItem value="observation">Observation</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>

@@ -14,12 +14,10 @@ import {
 import { Input } from "@/components/ui/input";
 import ThemeToggle from "./ThemeToggle";
 import NotificationDropdown from "./extra/notifications/NotificationDropdown";
-import { useSession, signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navbar() {
     const { toggleSidebar } = useSidebarOpen();
-    const { data: session } = useSession();
 
     return (
         <nav className="sticky top-0 z-40 border-b  border-zinc-200 px-2 bg-white dark:border-zinc-700 dark:bg-zinc-950">
@@ -49,13 +47,9 @@ export default function Navbar() {
                 {/* Right Section */}
                 <div className="flex items-center gap-3 ml-auto">
                     <ThemeToggle />
-
-                    {/* Notifications */}
                     <div className="relative">
                         <NotificationDropdown />
                     </div>
-
-                    {/* Profile Dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
@@ -72,9 +66,9 @@ export default function Navbar() {
                                     </p>
                                 </div>
                                 <Avatar>
-                                    <AvatarImage src={session?.user?.image} />
+                                    <AvatarImage src={""} />
                                     <AvatarFallback>
-                                        {session?.user?.name?.[0] || "U"}
+                                        {"U"}
                                     </AvatarFallback>
                                 </Avatar>
                             </Button>

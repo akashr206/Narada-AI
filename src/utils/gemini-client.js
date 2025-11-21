@@ -8,21 +8,20 @@ export const aiClient = new GoogleGenAI({
 
 // helper to call model and normalize result
 export async function callGemini(prompt, options = {}) {
-    console.log(process.env.GEMINI_API_KEY);
-    
-    const model = options.model || "gemini-2.5-flash";
+    console.log(prompt);
+
+    const model = options.model || "gemini-2.5-flash-lite";
     const contents = Array.isArray(prompt) ? prompt : [String(prompt)];
     const res = await aiClient.models.generateContent({
         model,
         contents,
     });
+
     // res structure: candidates[0].content.parts[...] — simplify to text join
     try {
-        const cand = res?.candidates?.[0];
-        if (!cand) return JSON.stringify(res);
-        const parts = cand.content?.parts ?? [];
-        const text = parts.map((p) => p.text ?? "").join("\n");
-        return text.trim();
+        const cleaned = res.text.replace(/```json|```|\\n|\r?\n/g, "");
+        
+        return cleaned;
     } catch (e) {
         return typeof res === "string" ? res : JSON.stringify(res);
     }

@@ -14,7 +14,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { API_URL } from "@/lib/utils2";
 import { toast } from "sonner";
-import { useHospitalId } from "@/context/HospitalIdContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ActivityLogList() {
@@ -23,7 +22,6 @@ export default function ActivityLogList() {
     const [showFilterDropdown, setShowFilterDropdown] = useState(false);
     const [activities, setActivities] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { loading: hospitalIdLoading, hospitalId } = useHospitalId();
 
     const getTypeIcon = (type) => {
         switch (type) {
@@ -77,7 +75,6 @@ export default function ActivityLogList() {
         try {
             const response = await fetch(`${API_URL}/api/activity-logs`);
             const data = await response.json();
-
             setActivities(data);
         } catch (error) {
             console.error("Error fetching activities:", error);
@@ -88,9 +85,8 @@ export default function ActivityLogList() {
     }
 
     useEffect(() => {
-        if (!hospitalIdLoading) fetchActivities();
-        console.log(hospitalId);
-    }, [hospitalId]);
+        fetchActivities();
+    }, []);
 
     return (
         <div className="space-y-4">

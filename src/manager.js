@@ -12,7 +12,7 @@ const sub = r.duplicate();
 console.log(
     "[manager] starting. type 'start' to create a monitor task, or 'exit' to quit."
 );
-await sub.subscribe("broadcast"); // to listen to final plans and updates
+await sub.subscribe("broadcast"); 
 
 sub.on("message", (ch, message) => {
     try {
@@ -31,41 +31,6 @@ sub.on("message", (ch, message) => {
     }
 });
 
-// listen to results stream (acknowledgements)
-async function tailResults() {
-    const STREAM = "results:stream";
-    // create group if missing
-    try {
-        await r.xgroup("CREATE", STREAM, "manager_group", "$", "MKSTREAM");
-    } catch (e) {}
-    while (true) {
-        try {
-            const res = await r.xreadgroup(
-                "GROUP",
-                "manager_group",
-                "manager",
-                "COUNT",
-                5,
-                "BLOCK",
-                5000,
-                "STREAMS",
-                STREAM,
-                ">"
-            );
-            if (!res) continue;
-            for (const [, messages] of res) {
-                for (const [id, fields] of messages) {
-                    const payload = JSON.parse(fields[1]);
-                    console.log("[manager] result-stream:", payload);
-                    await r.xack(STREAM, "manager_group", id);
-                }
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    }
-}
-tailResults();
 
 // Simple CLI to enqueue a monitor task
 import readline from "readline";
@@ -78,15 +43,11 @@ rl.on("line", async (line) => {
     if (!cmd) return;
     if (cmd === "exit") process.exit(0);
     // sample usage: start <lat> <lon> <hospitalName>
-    const parts = cmd.split(" ");
-    if (parts[0] === "start" && parts.length >= 3) {
-        const lat = Number(parts[1]);
-        const lon = Number(parts[2]);
-        const name = parts.slice(3).join(" ") || "My Hospital";
+    
+    if (cmd === "start") {
         const task = {
             id: uuidv4(),
             type: "monitor",
-            hospital: { name, lat, lon },
             createdAt: Date.now(),
         };
         // push to stream
@@ -94,7 +55,7 @@ rl.on("line", async (line) => {
         console.log("[manager] enqueued monitor task:", task.id);
     } else {
         console.log(
-            "Usage: start <lat> <lon> [hospitalName]  (e.g. start 12.9716 77.5946 ApolloHospital)"
+            "Usage: start  [hospitalName]  (e.g. start 12.9716 77.5946 ApolloHospital)"
         );
     }
 });

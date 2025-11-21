@@ -8,10 +8,9 @@ dotenv.config();
 
 const redisUrl = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 const redis = new Redis(redisUrl);
-const pub = redis.duplicate();
+const pub = redis.duplicate(); 
 
-const AGENT_ID =
-    process.env.AGENT_ID || `news_fetcher-${Math.floor(Math.random() * 1000)}`;
+const AGENT_ID =`news_fetcher`;
 console.log(`[${AGENT_ID}] started. Claiming tasks from tasks:stream...`);
 
 // Claiming/consumer group setup helpers
@@ -23,7 +22,7 @@ async function ensureGroup() {
     } catch (e) {
         // already exists => ignore
     }
-}
+} 
 await ensureGroup();
 
 async function claimAndProcess() {
@@ -46,18 +45,12 @@ async function claimAndProcess() {
         const obj = JSON.parse(fields[1]); // fields are [key, value] pairs; we put value at index 1
         console.log(`[${AGENT_ID}] claimed task ${id}`, obj);
         try {
-            const { hospital } = obj;
-            const incidents = await fetchNearbyNews(
-                hospital.lat,
-                hospital.lon,
-                15
-            );
+            const incidents = await fetchNearbyNews();
             // publish to broadcast for summarizers
             const summaryRequest = {
                 id: uuidv4(),
                 from: AGENT_ID,
                 taskId: id,
-                hospital,
                 incidents,
             };
             await pub.publish(

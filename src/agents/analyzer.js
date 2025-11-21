@@ -1,15 +1,15 @@
-// Analyzer agent watches broadcast for analysis_request and runs the analyze_graph
-// to predict patient load and staff/inventory needs; it then publishes final plan back on broadcast and results stream.
 import Redis from "ioredis";
 import dotenv from "dotenv";
+import { db } from "../utils/db.js";
+import { hospital, wards } from "../../schema.js";
 dotenv.config();
 import { predictLoadNode } from "../langgraph/analyze_graph.js";
 const redisUrl = process.env.REDIS_URL || "redis://127.0.0.1:6379";
-
+import { addToStream } from "../utils/addToStream.js";
 const sub = new Redis(redisUrl);
 const pub = new Redis(redisUrl);
-const AGENT_ID =
-    process.env.AGENT_ID || `analyzer-${Math.floor(Math.random() * 1000)}`;
+const r = sub.duplicate();
+const AGENT_ID = `analyzer`;
 
 console.log(`[${AGENT_ID}] subscribing to broadcast...`);
 await sub.subscribe("broadcast");
@@ -22,17 +22,38 @@ sub.on("message", async (channel, message) => {
         console.log(
             `[${AGENT_ID}] analyzing task ${req.taskId} from ${req.from}`
         );
+        const STREAM = await r.get("current-stream");
+        await addToStream(STREAM, {
+            batch: STREAM,
+            id: "hospital-data",
+            agent : "Analyzer",
+            status: "fetching",
+            message: "Fetching hospital details",
+        });
+        let hospitalData = await db.select().from(hospital);
+        let wardsData = await db.select().from(wards);
+        hospitalData.wards = wardsData;
+        await addToStream(STREAM, {
+            batch: STREAM,
+            id: "hospital-data",
+            agent: "Analyzer",
+            status: "complete",
+            message: "Hospital details fetched",
+        });
+        await addToStream(STREAM, {
+            batch: STREAM,
+            id: AGENT_ID,
+            agent: "Analyzer",
+            status: "running",
+            message: "Analyzing and predicting the surges",
+        });
 
-        const hospital = {
-            name: req.hospital.name || "Unknown",
-            beds: Number(process.env.HOSPITAL_BEDS || 100),
-            doctors: Number(process.env.HOSPITAL_DOCTORS || 20),
-            nurses: Number(process.env.HOSPITAL_NURSES || 60),
-        };
-
-        const state = { critical_incidents: req.critical_incidents, hospital };
+        const state = {
+            critical_incidents: req.critical_incidents,
+            hospital: hospitalData,
+        }; 
         const out = await predictLoadNode(state);
-
+        // const out = { analysis: "", raw: "" };
         const finalPlan = {
             taskId: req.taskId,
             agent: AGENT_ID,
@@ -40,6 +61,18 @@ sub.on("message", async (channel, message) => {
             raw: out.raw,
             timestamp: Date.now(),
         };
+        await addToStream(STREAM, {
+            batch: STREAM,
+            id: AGENT_ID,
+            status: "complete",
+            agent: "Analyzer",
+            message: "Completed the final plan",
+        });
+        await addToStream(STREAM, {
+            batch: STREAM,
+            id: "exit",
+            status: "complete",
+        });
 
         await pub.publish(
             "broadcast",

@@ -14,6 +14,8 @@ export async function predictLoadNode(state) {
     ];
 
     const text = await callGemini(prompt);
+    // console.log(text);
+    
     try {
         const start = text.indexOf("{");
         const jsonStr = text.slice(start);
