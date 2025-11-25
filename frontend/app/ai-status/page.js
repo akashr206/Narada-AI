@@ -5,6 +5,7 @@ import { CircleCheck, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { API_URL } from "@/lib/utils2";
 
 const socket = io("http://localhost:8000");
 
@@ -58,7 +59,7 @@ export default function Page() {
         setFinalPlan("");
 
         try {
-            const response = await fetch("http://localhost:8000/run_batch", {
+            const response = await fetch(API_URL + "/run_batch", {
                 method: "POST",
             });
 

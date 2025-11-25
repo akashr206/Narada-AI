@@ -34,7 +34,6 @@ sub.on("message", async (channel, message) => {
         });
         let hospitalData = await db.select().from(hospital);
         let wardsData = await db.select().from(wards);
-        hospitalData.wards = wardsData;
         await addToStream(STREAM, {
             batch: STREAM,
             id: "hospital-data",
@@ -53,6 +52,7 @@ sub.on("message", async (channel, message) => {
         const state = {
             critical_incidents: req.critical_incidents,
             hospital: hospitalData,
+            wards: wardsData,
         };
         const out = await predictLoadNode(state);
         // const out = { analysis: "", raw: "" };
