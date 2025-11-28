@@ -11,7 +11,6 @@ dotenv.config();
 import staffRoutes from "./routes/staffRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
 import inventoryRoutes from "./routes/inventoryRoutes.js";
-import activityLogRoutes from "./routes/activityLogRoutes.js";
 
 const redisUrl = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
@@ -33,7 +32,6 @@ app.use(cors({ origin: "http://localhost:3000" }));
 app.use("/api/staff", staffRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/inventory", inventoryRoutes);
-app.use("/api/activity-logs", activityLogRoutes);
 
 io.on("connection", (socket) => {
     console.log("Client connected:", socket.id);
@@ -50,6 +48,12 @@ app.post("/run_batch", async (req, res) => {
         batchId,
         message: "Batch started",
     });
+    const task = {
+        id: nanoid(12),
+        type: "monitor",
+        createdAt: Date.now(),
+    };
+    await r.xadd("tasks:stream", "*", "value", JSON.stringify(task));   
     async function tailResults() {
         const STREAM = "results:stream-" + batchId;
         r.set("current-stream", STREAM);
@@ -106,14 +110,6 @@ app.post("/run_batch", async (req, res) => {
     }
 
     tailResults();
-
-    const task = {
-        id: nanoid(12),
-        type: "monitor",
-        createdAt: Date.now(),
-    };
-
-    await r.xadd("tasks:stream", "*", "value", JSON.stringify(task));
 });
 
 server.listen(port, () => {

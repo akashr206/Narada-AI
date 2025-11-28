@@ -1,4 +1,11 @@
-import { pgTable, serial, text, varchar, integer, timestamp } from "drizzle-orm/pg-core";
+import {
+    pgTable,
+    serial,
+    text,
+    varchar,
+    integer,
+    timestamp,
+} from "drizzle-orm/pg-core";
 
 export const patients = pgTable("patients", {
     id: serial("id").primaryKey(),
@@ -14,12 +21,10 @@ export const patients = pgTable("patients", {
     admissionTime: text("admission_time").notNull(),
 });
 
-export const staff = pgTable("staff", {
+export const doctors = pgTable("doctors", {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 255 }).notNull(),
     role: varchar("role", { length: 100 }).notNull(),
-    department: varchar("department", { length: 100 }).notNull(),
-    available: integer("available").default(0).notNull(),
+    wardId: integer("ward_id").references(() => wards.id),
 });
 
 export const inventory = pgTable("inventory", {
@@ -33,31 +38,11 @@ export const inventory = pgTable("inventory", {
     minimum: integer("minimum").notNull(),
 });
 
-export const department = pgTable("department", {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 100 }).notNull(),
-    current: integer("current").notNull(),
-    max: integer("max").notNull(),
-    status: varchar("status", { length: 50 }).notNull(),
-});
-
-export const activityLog = pgTable("activity_log", {
-    id: serial("id").primaryKey(),
-    timestamp: varchar("timestamp", { length: 50 }).notNull(),
-    type: varchar("type", { length: 50 }).notNull(),
-    severity: varchar("severity", { length: 50 }).notNull(),
-    action: varchar("action", { length: 50 }).notNull(),
-    user: varchar("user", { length: 50 }).notNull(),
-    details: varchar("details", { length: 200 }).notNull(),
-    impact: varchar("impact", { length: 50 }).notNull(),
-});
-
 export const hospital = pgTable("hospital", {
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
     totalDoctors: integer("total_doctors").notNull(),
     totalNurses: integer("total_nurses").notNull(),
-    icuCapacity: integer("icu_capacity").notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -68,6 +53,6 @@ export const wards = pgTable("wards", {
     occupied: integer("occupied").notNull(),
     nurses: integer("nurses").notNull(),
     doctors: integer("doctors").notNull(),
-    criticality: integer("criticality").notNull(), 
+    criticality: integer("criticality").notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

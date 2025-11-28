@@ -26,6 +26,7 @@ async function ensureGroup() {
 }
 await ensureGroup();
 
+
 async function claimAndProcess() {
     // read one message for this consumer
     const res = await redis.xreadgroup(
@@ -43,7 +44,7 @@ async function claimAndProcess() {
     if (!res) return;
     const [stream, messages] = res[0];
     for (const [id, fields] of messages) {
-        const obj = JSON.parse(fields[1]); 
+        const obj = JSON.parse(fields[1]);
         console.log(`[${AGENT_ID}] claimed task ${id}`, obj);
         try {
             const STREAM = await redis.get("current-stream");
@@ -57,12 +58,11 @@ async function claimAndProcess() {
                 message: "Fetching news",
             });
             const incidents = await fetchNearbyNews();
-            // publish to broadcast for summarizers
             const summaryRequest = {
-                id: uuidv4(), 
+                id: uuidv4(),
                 from: AGENT_ID,
                 taskId: id,
-                incidents, 
+                incidents,
             };
             await pub.publish(
                 "broadcast",

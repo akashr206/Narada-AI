@@ -1,7 +1,8 @@
 import Redis from "ioredis";
 import dotenv from "dotenv";
 import { db } from "../utils/db.js";
-import { hospital, wards, inventory } from "../../schema.js";
+import { sql } from "drizzle-orm";
+import { hospital, wards, inventory, doctors } from "../../schema.js";
 
 dotenv.config();
 import { predictLoadNode } from "../langgraph/analyze_graph.js";
@@ -36,6 +37,18 @@ sub.on("message", async (channel, message) => {
         });
         let hospitalData = await db.select().from(hospital);
         let wardsData = await db.select().from(wards);
+        const wardsWithDoctorTypeCounts = await db
+            .select({
+                wardId: wards.id,
+                wardName: wards.name,
+                role: doctors.role,
+                count: sql`COUNT(${doctors.role})`,
+            })
+            .from(wards)
+            .leftJoin(doctors, sql`${doctors.wardId} = ${wards.id}`)
+            .groupBy(wards.id, doctors.role);
+        console.log("wardsWithDoctorTypeCounts : ", wardsWithDoctorTypeCounts);
+
         await addToStream(STREAM, {
             batch: STREAM,
             id: AGENT_ID,
@@ -60,18 +73,18 @@ sub.on("message", async (channel, message) => {
             id: AGENT_ID,
             task: "fetchInventoryData",
             agent: "Analyzer",
-            status: "running",
+            status: "complete",
             taskStatus: "complete",
             message: "Inventory details fetched",
         });
         await addToStream(STREAM, {
             batch: STREAM,
-            id: AGENT_ID,
-            task: "analyze",
-            agent: "Analyzer",
+            id: "predictor",
+            task: "predict",
+            agent: "Predictor",
             status: "running",
             taskStatus: "running",
-            message: "Analyzing and predicting the surges",
+            message: "Predicting the surges",
         });
 
         const state = {
@@ -79,9 +92,9 @@ sub.on("message", async (channel, message) => {
             hospital: hospitalData,
             wards: wardsData,
             inventory: inventoryData,
+            doctorDetails: wardsWithDoctorTypeCounts,
         };
         const out = await predictLoadNode(state);
-        // const out = { analysis: "", raw: "" };
         const finalPlan = {
             taskId: req.taskId,
             agent: AGENT_ID,
@@ -97,9 +110,9 @@ sub.on("message", async (channel, message) => {
 
         await addToStream(STREAM, {
             batch: STREAM,
-            id: AGENT_ID,
-            task: "analyze",
-            agent: "Analyzer",
+            id: "predictor",
+            task: "predict",
+            agent: "Predictor",
             status: "complete",
             taskStatus: "complete",
             message: "Completed the final plan",
