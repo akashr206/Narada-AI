@@ -10,7 +10,7 @@ export function GenericDataView({ data }) {
     if (typeof data === "string") {
         return (
             <ScrollArea className="h-full w-full">
-                <div className="p-6">
+                <div className="p-6 ">
                     <div className="bg-muted/30 p-6 rounded-lg border border-border">
                         <p className="text-foreground whitespace-pre-wrap leading-relaxed">
                             {data}
