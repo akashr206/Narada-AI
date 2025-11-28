@@ -24,17 +24,13 @@ const SIDEBAR_ITEMS = [
         section: "Operations",
         items: [
             { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-            { label: "Patient Flow", icon: Users, href: "/patient-flow" },
             {
                 label: "Staff Management",
                 icon: UserCheck,
                 href: "/staff-management",
             },
             { label: "Inventory", icon: Package, href: "/inventory" },
-            { label: "AI Decisions", icon: Lightbulb, href: "/ai-decisions" },
             { label: "AI Status", icon: Bot, href: "/ai-status" },
-            { label: "Activity Log", icon: Activity, href: "/activity-log" },
-            { label: "Settings", icon: Settings, href: "/settings" },
         ],
     },
 ];
@@ -146,10 +142,9 @@ export default function Sidebar() {
                                                     <Button
                                                         variant="ghost"
                                                         className={`w-full justify-start gap-3 px-4 py-2 text-sm font-medium
-                                                            ${
-                                                                active
-                                                                    ? "bg-zinc-100 text-blue-600 hover:bg-zinc-100 dark:bg-zinc-800 dark:text-blue-400 dark:hover:bg-zinc-800"
-                                                                    : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
+                                                            ${active
+                                                                ? "bg-zinc-100 text-blue-600 hover:bg-zinc-100 dark:bg-zinc-800 dark:text-blue-400 dark:hover:bg-zinc-800"
+                                                                : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
                                                             }
                                                         `}
                                                     >

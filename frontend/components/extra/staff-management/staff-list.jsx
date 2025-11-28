@@ -10,6 +10,7 @@ export default function StaffList() {
     const [searchTerm, setSearchTerm] = useState("");
     const [staff, setStaff] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const getStatusBadge = (status) => {
         const styles = {
@@ -24,17 +25,37 @@ export default function StaffList() {
             break: "break",
             "off-duty": "off-duty",
         };
-        return { style: styles[status], label: labels[status] };
+        return {
+            style: styles[status] || "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200",
+            label: labels[status] || status || "Unknown"
+        };
     };
 
     const fetchStaff = async () => {
         try {
             setLoading(true);
-            const res = await fetch(API_URL + "/api/staff");
+            setError(null);
+            const url = API_URL ? `${API_URL}/api/staff` : "/api/staff";
+            const res = await fetch(url);
+
+            if (!res.ok) {
+                throw new Error(`Failed to fetch staff: ${res.status} ${res.statusText}`);
+            }
+
             const data = await res.json();
-            setStaff(data);
+
+            if (Array.isArray(data)) {
+                setStaff(data);
+            } else {
+                console.error("Received non-array data:", data);
+                setStaff([]);
+                // Don't throw here to avoid crashing UI, just show empty list or maybe an error
+                setError("Invalid data format received from server");
+            }
         } catch (error) {
             console.error("Error fetching staff:", error);
+            setError(error.message);
+            setStaff([]);
         } finally {
             setLoading(false);
         }
@@ -46,10 +67,27 @@ export default function StaffList() {
 
     const filteredStaff = staff.filter(
         (s) =>
-            s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            s.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            s.department.toLowerCase().includes(searchTerm.toLowerCase())
+            (s.name?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+            (s.role?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+            (s.department?.toLowerCase() || "").includes(searchTerm.toLowerCase())
     );
+
+    if (error) {
+        return (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800 dark:border-red-900 dark:bg-red-900/20 dark:text-red-200">
+                <p className="font-medium">Error loading staff data</p>
+                <p className="text-sm mt-1">{error}</p>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={fetchStaff}
+                    className="mt-3 border-red-200 hover:bg-red-100 dark:border-red-800 dark:hover:bg-red-900/40"
+                >
+                    Retry
+                </Button>
+            </div>
+        );
+    }
 
     return (
         <div className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
@@ -106,7 +144,7 @@ export default function StaffList() {
                                 const badge = getStatusBadge(staff.status);
                                 return (
                                     <tr
-                                        key={staff.id}
+                                        key={staff.id || Math.random()}
                                         className="border-b border-zinc-100 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 transition-colors"
                                     >
                                         <td className="px-4 sm:px-6 py-4 text-xs sm:text-sm font-medium text-zinc-900 dark:text-white">
