@@ -4,13 +4,14 @@ import Redis from "ioredis";
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from "uuid";
 import { fetchNearbyNews } from "../utils/geonews.js";
+import { addToStream } from "../utils/addToStream.js";
 dotenv.config();
 
 const redisUrl = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 const redis = new Redis(redisUrl);
-const pub = redis.duplicate(); 
+const pub = redis.duplicate();
 
-const AGENT_ID =`news_fetcher`;
+const AGENT_ID = `news_fetcher`;
 console.log(`[${AGENT_ID}] started. Claiming tasks from tasks:stream...`);
 
 // Claiming/consumer group setup helpers
@@ -22,7 +23,7 @@ async function ensureGroup() {
     } catch (e) {
         // already exists => ignore
     }
-} 
+}
 await ensureGroup();
 
 async function claimAndProcess() {
@@ -42,16 +43,26 @@ async function claimAndProcess() {
     if (!res) return;
     const [stream, messages] = res[0];
     for (const [id, fields] of messages) {
-        const obj = JSON.parse(fields[1]); // fields are [key, value] pairs; we put value at index 1
+        const obj = JSON.parse(fields[1]); 
         console.log(`[${AGENT_ID}] claimed task ${id}`, obj);
         try {
+            const STREAM = await redis.get("current-stream");
+            await addToStream(STREAM, {
+                id: AGENT_ID,
+                task: "fetch-news",
+                batch: STREAM,
+                agent: "News Fetcher",
+                status: "running",
+                taskStatus: "running",
+                message: "Fetching news",
+            });
             const incidents = await fetchNearbyNews();
             // publish to broadcast for summarizers
             const summaryRequest = {
-                id: uuidv4(),
+                id: uuidv4(), 
                 from: AGENT_ID,
                 taskId: id,
-                incidents,
+                incidents, 
             };
             await pub.publish(
                 "broadcast",
@@ -60,11 +71,19 @@ async function claimAndProcess() {
                     payload: summaryRequest,
                 })
             );
+            await addToStream(STREAM, {
+                id: AGENT_ID,
+                task: "fetch-news",
+                batch: STREAM,
+                agent: "News Fetcher",
+                status: "complete",
+                taskStatus: "complete",
+                message: "News fetched",
+            });
             // Acknowledge stream entry
             await redis.xack(STREAM, GROUP, id);
         } catch (e) {
             console.error("processing error", e);
-            // don't ack to allow retries / manual inspection
         }
     }
 }

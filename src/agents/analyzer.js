@@ -1,11 +1,11 @@
 import Redis from "ioredis";
 import dotenv from "dotenv";
 import { db } from "../utils/db.js";
-import { hospital, wards } from "../../schema.js";
+import { hospital, wards, inventory } from "../../schema.js";
+
 dotenv.config();
 import { predictLoadNode } from "../langgraph/analyze_graph.js";
 const redisUrl = process.env.REDIS_URL || "redis://127.0.0.1:6379";
-console.log(redisUrl);
 
 import { addToStream } from "../utils/addToStream.js";
 const sub = new Redis(redisUrl);
@@ -27,25 +27,50 @@ sub.on("message", async (channel, message) => {
         const STREAM = await r.get("current-stream");
         await addToStream(STREAM, {
             batch: STREAM,
-            id: "hospital-data",
+            id: AGENT_ID,
+            task: "fetchHospitalData",
             agent: "Analyzer",
             status: "fetching",
+            taskStatus: "fetching",
             message: "Fetching hospital details",
         });
         let hospitalData = await db.select().from(hospital);
         let wardsData = await db.select().from(wards);
         await addToStream(STREAM, {
             batch: STREAM,
-            id: "hospital-data",
+            id: AGENT_ID,
+            task: "fetchHospitalData",
             agent: "Analyzer",
-            status: "complete",
+            status: "running",
+            taskStatus: "complete",
             message: "Hospital details fetched",
         });
         await addToStream(STREAM, {
             batch: STREAM,
             id: AGENT_ID,
+            task: "fetchInventoryData",
             agent: "Analyzer",
             status: "running",
+            taskStatus: "running",
+            message: "Fetching Inventory details",
+        });
+        let inventoryData = await db.select().from(inventory);
+        await addToStream(STREAM, {
+            batch: STREAM,
+            id: AGENT_ID,
+            task: "fetchInventoryData",
+            agent: "Analyzer",
+            status: "running",
+            taskStatus: "complete",
+            message: "Inventory details fetched",
+        });
+        await addToStream(STREAM, {
+            batch: STREAM,
+            id: AGENT_ID,
+            task: "analyze",
+            agent: "Analyzer",
+            status: "running",
+            taskStatus: "running",
             message: "Analyzing and predicting the surges",
         });
 
@@ -53,6 +78,7 @@ sub.on("message", async (channel, message) => {
             critical_incidents: req.critical_incidents,
             hospital: hospitalData,
             wards: wardsData,
+            inventory: inventoryData,
         };
         const out = await predictLoadNode(state);
         // const out = { analysis: "", raw: "" };
@@ -68,11 +94,14 @@ sub.on("message", async (channel, message) => {
             "broadcast",
             JSON.stringify({ type: "final_plan", payload: finalPlan })
         );
+
         await addToStream(STREAM, {
             batch: STREAM,
             id: AGENT_ID,
-            status: "complete",
+            task: "analyze",
             agent: "Analyzer",
+            status: "complete",
+            taskStatus: "complete",
             message: "Completed the final plan",
         });
         await addToStream(STREAM, {

@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ResponseDialog } from "@/components/ai-status/ResponseDialog";
+import { API_URL } from "@/lib/utils2.js";
 
-const socket = io("http://localhost:8000");
+const socket = io(API_URL);
 
 export default function Page() {
     const [updates, setUpdates] = useState({});
@@ -22,7 +23,8 @@ export default function Page() {
             if (!data.batchId) return;
 
             const item = data.payload;
-
+            console.log(item);
+            
             setUpdates((prev) => {
                 const newUpdates = {
                     ...prev,
@@ -34,7 +36,7 @@ export default function Page() {
         };
 
         const handleBatchCompleted = (data) => {
-            setFinalPlan(data.finalPlan); // Store the full object
+            setFinalPlan(data.finalPlan); 
             console.log(data.finalPlan);
 
             setUpdates((prev) => ({
@@ -60,7 +62,7 @@ export default function Page() {
         setFinalPlan(null);
 
         try {
-            const response = await fetch("http://localhost:8000/run_batch", {
+            const response = await fetch(`${API_URL}/run_batch`, {
                 method: "POST",
             });
 
@@ -96,7 +98,7 @@ export default function Page() {
     const hasStarted = updatesList.length > 0 || updates.completed;
 
     return (
-        <div className="min-h-screen py-6 px-4 sm:py-10 sm:px-6 lg:px-8 bg-background transition-colors duration-300">
+        <div className="min-h-screen bg-background">
             <div className="max-w-4xl mx-auto w-full">
                 <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
                     <div className="px-4 py-4 sm:px-8 sm:py-6 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -105,7 +107,9 @@ export default function Page() {
                         </h2>
                         {hasStarted && (
                             <div className="flex items-center gap-2">
-                                <span className="text-xs sm:text-sm text-muted-foreground">Batch ID:</span>
+                                <span className="text-xs sm:text-sm text-muted-foreground">
+                                    Batch ID:
+                                </span>
                                 <code className="bg-muted px-2 py-1 rounded text-xs font-mono text-foreground">
                                     {batchId}
                                 </code>
@@ -119,9 +123,13 @@ export default function Page() {
                                 <div className="mb-6 p-4 bg-blue-500/10 rounded-full">
                                     <Loader2 className="w-8 h-8 sm:w-12 sm:h-12 text-blue-500" />
                                 </div>
-                                <h3 className="text-lg sm:text-xl font-medium text-foreground mb-2">Ready to Start</h3>
+                                <h3 className="text-lg sm:text-xl font-medium text-foreground mb-2">
+                                    Ready to Start
+                                </h3>
                                 <p className="text-muted-foreground mb-8 max-w-md text-sm sm:text-base">
-                                    Initiate the multi-agent workflow to analyze hospital data and generate an operational plan.
+                                    Initiate the multi-agent workflow to analyze
+                                    hospital data and generate an operational
+                                    plan.
                                 </p>
                                 <Button
                                     onClick={startBatch}
@@ -129,7 +137,9 @@ export default function Page() {
                                     size="lg"
                                     className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto min-w-[200px]"
                                 >
-                                    {isRunning ? "Starting..." : "Start Batch Analysis"}
+                                    {isRunning
+                                        ? "Starting..."
+                                        : "Start Batch Analysis"}
                                 </Button>
                                 {error && (
                                     <div className="mt-6 px-4 py-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm max-w-md">
@@ -148,16 +158,21 @@ export default function Page() {
                                         key={u.id}
                                         className={cn(
                                             "p-4 rounded-lg border transition-all",
-                                            u.status === "running" || u.status === "fetching" ? "bg-amber-50/50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800" :
-                                                u.status === "complete" ? "bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800" :
-                                                    u.status === "error" ? "bg-red-50/50 dark:bg-red-900/10 border-red-200 dark:border-red-800" :
-                                                        "bg-card border-border",
+                                            u.status === "running" ||
+                                                u.status === "fetching"
+                                                ? "bg-amber-50/50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800"
+                                                : u.status === "complete"
+                                                ? "bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800"
+                                                : u.status === "error"
+                                                ? "bg-red-50/50 dark:bg-red-900/10 border-red-200 dark:border-red-800"
+                                                : "bg-card border-border",
                                             u.id === "exit" && "hidden"
                                         )}
                                     >
                                         <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
                                             <div className="shrink-0 mt-1">
-                                                {u.status === "running" || u.status === "fetching" ? (
+                                                {u.status === "running" ||
+                                                u.status === "fetching" ? (
                                                     <Loader2 className="animate-spin w-5 h-5 text-amber-500" />
                                                 ) : u.status === "complete" ? (
                                                     <CircleCheck className="w-5 h-5 text-emerald-500" />
@@ -171,17 +186,26 @@ export default function Page() {
                                                     <span className="font-semibold text-foreground capitalize">
                                                         {u.agent}
                                                     </span>
-                                                    <span className={cn(
-                                                        "text-xs px-2 py-0.5 rounded-full uppercase tracking-wider font-medium",
-                                                        u.status === "running" || u.status === "fetching" ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400" :
-                                                            u.status === "complete" ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400" :
-                                                                "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400"
-                                                    )}>
+                                                    <span
+                                                        className={cn(
+                                                            "text-xs px-2 py-0.5 rounded-full uppercase tracking-wider font-medium",
+                                                            u.status ===
+                                                                "running" ||
+                                                                u.status ===
+                                                                    "fetching"
+                                                                ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400"
+                                                                : u.status ===
+                                                                  "complete"
+                                                                ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"
+                                                                : "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400"
+                                                        )}
+                                                    >
                                                         {u.status}
                                                     </span>
                                                 </div>
 
-                                                {u.status === "running" || u.status === "fetching" ? (
+                                                {u.status === "running" ||
+                                                u.status === "fetching" ? (
                                                     <p className="text-sm text-muted-foreground animate-pulse">
                                                         {u.message}
                                                     </p>
@@ -193,7 +217,11 @@ export default function Page() {
                                                         <Button
                                                             variant="outline"
                                                             size="sm"
-                                                            onClick={() => setSelectedUpdate(u)}
+                                                            onClick={() =>
+                                                                setSelectedUpdate(
+                                                                    u
+                                                                )
+                                                            }
                                                             className="w-full sm:w-auto h-8 text-xs whitespace-nowrap"
                                                         >
                                                             View Response
@@ -232,8 +260,13 @@ export default function Page() {
                                             <CircleCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                                         </div>
                                         <div className="text-center sm:text-left">
-                                            <p className="text-emerald-900 dark:text-emerald-100 font-semibold text-sm sm:text-base">Final Plan Generated</p>
-                                            <p className="text-emerald-700 dark:text-emerald-400 text-xs sm:text-sm">Ready for review and implementation</p>
+                                            <p className="text-emerald-900 dark:text-emerald-100 font-semibold text-sm sm:text-base">
+                                                Final Plan Generated
+                                            </p>
+                                            <p className="text-emerald-700 dark:text-emerald-400 text-xs sm:text-sm">
+                                                Ready for review and
+                                                implementation
+                                            </p>
                                         </div>
                                     </div>
                                     <Button

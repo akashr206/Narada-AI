@@ -33,18 +33,22 @@ sub.on("message", async (channel, message) => {
         let hospitalData = await db.select().from(hospital);
         await addToStream(STREAM, {
             batch: STREAM,
+            task : "summarize-incidents",
             agent: "Summarizer",
             id: AGENT_ID,
             status: "running",
+            taskStatus: "running",
             message: "Summarizing the data",
         });
         const state = { incidents: req.incidents, hospital: hospitalData };
         const out = await summarizeIncidentsNode(state);
         await addToStream(STREAM, {
             batch: STREAM,
-            id: AGENT_ID,
+            task : "summarize-incidents",
             agent: "Summarizer",
+            id: AGENT_ID,
             status: "complete",
+            taskStatus: "complete",
             message: "Summarized all the data.",
         });
         const analysisReq = {
